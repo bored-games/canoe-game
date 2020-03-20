@@ -16,3 +16,7 @@ Horizontal | Vertical
 The only available board is based on the original design by Dale Walton.
 
 <p align="center"><img src="_examples/preview.png" width="1000px" alt="" /></p>
+
+
+## Compiling
+Compile changes with ```elm make src/Canoe.elm --output=assets/js/main.js && elm reactor```
