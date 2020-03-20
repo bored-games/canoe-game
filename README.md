@@ -2,8 +2,11 @@
 A tic-tac-toe like two-player strategy game.
 
 ## Objective
-Players take turns playing colored pegs on available holes, one at a time. The first to complete two unconnected "canoes" wins. A "canoe" is formed by four pegs in this configuration (or any rotation). 
+Players take turns placing colored pegs into available holes, one at a time. The first to complete two completed "canoes" wins. A "canoe" is formed by four pegs in this configuration (or any rotation). The two canoes may not share any pegs.
 
-:white_circle: :red_circle: :white_circle: :white_circle: :red_circle: :white_circle: 
-
-:white_circle: :white_circle: :red_circle: :red_circle: :white_circle: :white_circle:
+Horizontal | Vertical
+---------- | --------
+:white_circle: :white_circle: :white_circle: :white_circle: :white_circle: :white_circle: | :white_circle: :white_circle: :white_circle: :red_circle: :white_circle: :white_circle:
+:white_circle: :red_circle: :white_circle: :white_circle: :red_circle: :white_circle: | :white_circle: :white_circle: :red_circle: :white_circle: :white_circle: :white_circle:
+:white_circle: :white_circle: :red_circle: :red_circle: :white_circle: :white_circle: | :white_circle: :white_circle: :red_circle: :white_circle: :white_circle: :white_circle:
+:white_circle: :white_circle: :white_circle: :white_circle: :white_circle: :white_circle: | :white_circle: :white_circle: :white_circle: :red_circle: :white_circle: :white_circle:
