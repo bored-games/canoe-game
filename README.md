@@ -10,3 +10,19 @@ Horizontal | Vertical
 :white_circle: :red_circle: :white_circle: :white_circle: :red_circle: :white_circle: | :white_circle: :white_circle: :red_circle: :white_circle: :white_circle: :white_circle:
 :white_circle: :white_circle: :red_circle: :red_circle: :white_circle: :white_circle: | :white_circle: :white_circle: :red_circle: :white_circle: :white_circle: :white_circle:
 :white_circle: :white_circle: :white_circle: :white_circle: :white_circle: :white_circle: | :white_circle: :white_circle: :white_circle: :red_circle: :white_circle: :white_circle:
+
+
+## Default board layout
+The only available board is based on the original design by Dale Walton.
+
+:black_circle: :o: :o: :black_circle: :black_circle: :black_circle: :black_circle: :black_circle: :black_circle: :black_circle: :o: :o: :black_circle:
+
+:o: :o: :o: :o: :o: :o: :o: :o: :o: :o: :o: :o: :o:
+
+:o: :o: :o: :o: :o: :o: :o: :o: :o: :o: :o: :o: :o:
+
+:o: :o: :o: :o: :o: :o: :o: :o: :o: :o: :o: :o: :o:
+
+:black_circle: :o: :o: :o: :o: :o: :o: :o: :o: :o: :o: :o: :black_circle:
+
+:black_circle: :black_circle: :black_circle: :o: :o: :o: :o: :o: :o: :o: :black_circle: :black_circle: :black_circle:
