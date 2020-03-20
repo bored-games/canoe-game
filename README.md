@@ -15,14 +15,4 @@ Horizontal | Vertical
 ## Default board layout
 The only available board is based on the original design by Dale Walton.
 
-:o: :red_circle: :red_circle: :o: :o: :o: :o: :o: :o: :o: :red_circle: :red_circle: :o:
-
-:red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle:
-
-:red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle:
-
-:red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle:
-
-:o: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :o:
-
-:o: :o: :o: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :red_circle: :o: :o: :o:
+<p align="center"><img src="_examples/preview.png" width="1000px" alt="" /></p>
