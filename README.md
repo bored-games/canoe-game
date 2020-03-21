@@ -15,7 +15,7 @@ Horizontal | Vertical
 ## Default board layout
 The only available board is based on the original design by Dale Walton.
 
-<p align="center"><img src="_examples/preview.png" width="1000px" alt="" /></p>
+<p align="center"><img src="docs/preview.png" width="1000px" alt="" /></p>
 
 
 ## Compiling
