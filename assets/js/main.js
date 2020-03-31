@@ -5450,8 +5450,3457 @@ var author$project$Main$decodeJSON = A3(
 	author$project$Main$JSONMessage,
 	A2(elm$json$Json$Decode$field, 'action', elm$json$Json$Decode$string),
 	A2(elm$json$Json$Decode$field, 'content', elm$json$Json$Decode$value));
+var author$project$Main$getCanoesHelper = F5(
+	function (row, ix, iy, tx, ty) {
+		getCanoesHelper:
+		while (true) {
+			if (row.b) {
+				var c = row.a;
+				var cs = row.b;
+				if (_Utils_eq(
+					_Utils_Tuple2(ix, iy),
+					_Utils_Tuple2(tx, ty))) {
+					return elm$core$Maybe$Just(c);
+				} else {
+					var $temp$row = cs,
+						$temp$ix = ix + 1,
+						$temp$iy = iy,
+						$temp$tx = tx,
+						$temp$ty = ty;
+					row = $temp$row;
+					ix = $temp$ix;
+					iy = $temp$iy;
+					tx = $temp$tx;
+					ty = $temp$ty;
+					continue getCanoesHelper;
+				}
+			} else {
+				return elm$core$Maybe$Nothing;
+			}
+		}
+	});
+var author$project$Main$getCanoes = F4(
+	function (board, row, tx, ty) {
+		getCanoes:
+		while (true) {
+			if (board.b) {
+				var r = board.a;
+				var rs = board.b;
+				var _n1 = A5(author$project$Main$getCanoesHelper, r, 0, row, tx, ty);
+				if (_n1.$ === 'Just') {
+					var c = _n1.a;
+					return c;
+				} else {
+					var $temp$board = rs,
+						$temp$row = row + 1,
+						$temp$tx = tx,
+						$temp$ty = ty;
+					board = $temp$board;
+					row = $temp$row;
+					tx = $temp$tx;
+					ty = $temp$ty;
+					continue getCanoes;
+				}
+			} else {
+				return _List_fromArray(
+					[_List_Nil]);
+			}
+		}
+	});
 var elm$json$Json$Encode$string = _Json_wrap;
 var author$project$Main$outputPort = _Platform_outgoingPort('outputPort', elm$json$Json$Encode$string);
+var author$project$Main$tempCanoeList = _List_fromArray(
+	[
+		_List_fromArray(
+		[
+			_List_Nil,
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 1),
+					_Utils_Tuple2(1, 0),
+					_Utils_Tuple2(2, 0),
+					_Utils_Tuple2(3, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 0),
+					_Utils_Tuple2(0, 1),
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(1, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 0),
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(1, 3)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 1),
+					_Utils_Tuple2(1, 0),
+					_Utils_Tuple2(2, 0),
+					_Utils_Tuple2(3, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 0),
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 0),
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(2, 3)
+				])
+			]),
+			_List_Nil,
+			_List_Nil,
+			_List_Nil,
+			_List_Nil,
+			_List_Nil,
+			_List_Nil,
+			_List_Nil,
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 0),
+					_Utils_Tuple2(11, 0),
+					_Utils_Tuple2(12, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 0),
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 0),
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(11, 2),
+					_Utils_Tuple2(10, 3)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 0),
+					_Utils_Tuple2(11, 0),
+					_Utils_Tuple2(12, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 0),
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 0),
+					_Utils_Tuple2(12, 1),
+					_Utils_Tuple2(12, 2),
+					_Utils_Tuple2(11, 3)
+				])
+			]),
+			_List_Nil
+		]),
+		_List_fromArray(
+		[
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 1),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 1),
+					_Utils_Tuple2(1, 0),
+					_Utils_Tuple2(2, 0),
+					_Utils_Tuple2(3, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 0),
+					_Utils_Tuple2(0, 1),
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(1, 3)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 0),
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(0, 3),
+					_Utils_Tuple2(1, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(1, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 0),
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(1, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(2, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 1),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 1),
+					_Utils_Tuple2(1, 0),
+					_Utils_Tuple2(2, 0),
+					_Utils_Tuple2(3, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 0),
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(2, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(3, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(4, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(5, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(6, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(7, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(8, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 2),
+					_Utils_Tuple2(12, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(11, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 0),
+					_Utils_Tuple2(11, 0),
+					_Utils_Tuple2(12, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 0),
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(9, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(11, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(12, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 0),
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(11, 2),
+					_Utils_Tuple2(11, 3),
+					_Utils_Tuple2(10, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(12, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(11, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 0),
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(11, 2),
+					_Utils_Tuple2(10, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(12, 2),
+					_Utils_Tuple2(12, 3),
+					_Utils_Tuple2(11, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 2),
+					_Utils_Tuple2(12, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 0),
+					_Utils_Tuple2(11, 0),
+					_Utils_Tuple2(12, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 0),
+					_Utils_Tuple2(12, 1),
+					_Utils_Tuple2(12, 2),
+					_Utils_Tuple2(11, 3)
+				])
+			])
+		]),
+		_List_fromArray(
+		[
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 0),
+					_Utils_Tuple2(0, 1),
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(1, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(0, 3),
+					_Utils_Tuple2(1, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 1),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(4, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 3),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 0),
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(5, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 1),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 3),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 0),
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(1, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(1, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(6, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 0),
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(2, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(2, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(3, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(7, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(3, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(4, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(8, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(4, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(5, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(9, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(5, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(6, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(10, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(6, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(7, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(11, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(11, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(11, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(7, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(9, 4),
+					_Utils_Tuple2(8, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(11, 3),
+					_Utils_Tuple2(12, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(12, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(12, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 0),
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(8, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(10, 4),
+					_Utils_Tuple2(9, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 2),
+					_Utils_Tuple2(12, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 0),
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(11, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(9, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(11, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 2),
+					_Utils_Tuple2(12, 1)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(11, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 2),
+					_Utils_Tuple2(12, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 0),
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(11, 2),
+					_Utils_Tuple2(10, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(11, 2),
+					_Utils_Tuple2(11, 3),
+					_Utils_Tuple2(10, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(11, 3),
+					_Utils_Tuple2(12, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(12, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 0),
+					_Utils_Tuple2(12, 1),
+					_Utils_Tuple2(12, 2),
+					_Utils_Tuple2(11, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(12, 2),
+					_Utils_Tuple2(12, 3),
+					_Utils_Tuple2(11, 4)
+				])
+			])
+		]),
+		_List_fromArray(
+		[
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 3),
+					_Utils_Tuple2(1, 4),
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 3),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(0, 3),
+					_Utils_Tuple2(1, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(4, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 0),
+					_Utils_Tuple2(0, 1),
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(1, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 0),
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(1, 3)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(5, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 4),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 0),
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 0),
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(2, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(1, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 3),
+					_Utils_Tuple2(1, 4),
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(6, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 3),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 4),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(2, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(7, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(3, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(3, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(8, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(4, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(4, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(9, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(5, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(5, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 4),
+					_Utils_Tuple2(10, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(10, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(6, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(6, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 4),
+					_Utils_Tuple2(10, 4),
+					_Utils_Tuple2(11, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(11, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(7, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(7, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 4),
+					_Utils_Tuple2(11, 4),
+					_Utils_Tuple2(12, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(12, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(11, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 2),
+					_Utils_Tuple2(12, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(8, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(9, 4),
+					_Utils_Tuple2(8, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 4),
+					_Utils_Tuple2(10, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(11, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(11, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 0),
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(11, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 0),
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(11, 2),
+					_Utils_Tuple2(10, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(9, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(10, 4),
+					_Utils_Tuple2(9, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 4),
+					_Utils_Tuple2(10, 4),
+					_Utils_Tuple2(11, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(11, 3),
+					_Utils_Tuple2(12, 2)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 0),
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 0),
+					_Utils_Tuple2(12, 1),
+					_Utils_Tuple2(12, 2),
+					_Utils_Tuple2(11, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(11, 2),
+					_Utils_Tuple2(11, 3),
+					_Utils_Tuple2(10, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 4),
+					_Utils_Tuple2(11, 4),
+					_Utils_Tuple2(12, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(11, 2),
+					_Utils_Tuple2(12, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(12, 2),
+					_Utils_Tuple2(12, 3),
+					_Utils_Tuple2(11, 4)
+				])
+			])
+		]),
+		_List_fromArray(
+		[
+			_List_Nil,
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 3),
+					_Utils_Tuple2(1, 4),
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(4, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 4),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(0, 2),
+					_Utils_Tuple2(0, 3),
+					_Utils_Tuple2(1, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(1, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 5),
+					_Utils_Tuple2(4, 5),
+					_Utils_Tuple2(5, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(5, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(0, 3),
+					_Utils_Tuple2(1, 4),
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(1, 2),
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(2, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 5),
+					_Utils_Tuple2(5, 5),
+					_Utils_Tuple2(6, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(6, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 3),
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(2, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 1),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(3, 4)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 5),
+					_Utils_Tuple2(6, 5),
+					_Utils_Tuple2(7, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(7, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(1, 4),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 5),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 1),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(4, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(3, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 5),
+					_Utils_Tuple2(7, 5),
+					_Utils_Tuple2(8, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 5),
+					_Utils_Tuple2(4, 5),
+					_Utils_Tuple2(5, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(8, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 5),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 5),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 1),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(5, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(4, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 5),
+					_Utils_Tuple2(8, 5),
+					_Utils_Tuple2(9, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 5),
+					_Utils_Tuple2(5, 5),
+					_Utils_Tuple2(6, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(9, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 5),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 5),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 1),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(6, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(5, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 5),
+					_Utils_Tuple2(9, 5),
+					_Utils_Tuple2(10, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 5),
+					_Utils_Tuple2(6, 5),
+					_Utils_Tuple2(7, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(10, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 5),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 5),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 1),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(7, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(6, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 5),
+					_Utils_Tuple2(7, 5),
+					_Utils_Tuple2(8, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 4),
+					_Utils_Tuple2(11, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 5),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(11, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(8, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(7, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 5),
+					_Utils_Tuple2(8, 5),
+					_Utils_Tuple2(9, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 4),
+					_Utils_Tuple2(10, 4),
+					_Utils_Tuple2(12, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 4),
+					_Utils_Tuple2(10, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 1),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(9, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(9, 4),
+					_Utils_Tuple2(8, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 5),
+					_Utils_Tuple2(9, 5),
+					_Utils_Tuple2(10, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 4),
+					_Utils_Tuple2(10, 4),
+					_Utils_Tuple2(11, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(10, 1),
+					_Utils_Tuple2(11, 2),
+					_Utils_Tuple2(11, 3),
+					_Utils_Tuple2(10, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(10, 4),
+					_Utils_Tuple2(9, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 4),
+					_Utils_Tuple2(11, 4),
+					_Utils_Tuple2(12, 3)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(11, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(10, 2),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(11, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(11, 1),
+					_Utils_Tuple2(12, 2),
+					_Utils_Tuple2(12, 3),
+					_Utils_Tuple2(11, 4)
+				])
+			]),
+			_List_Nil
+		]),
+		_List_fromArray(
+		[
+			_List_Nil,
+			_List_Nil,
+			_List_Nil,
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 5),
+					_Utils_Tuple2(4, 5),
+					_Utils_Tuple2(6, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 5),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(2, 3),
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(3, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 5),
+					_Utils_Tuple2(5, 5),
+					_Utils_Tuple2(7, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(2, 4),
+					_Utils_Tuple2(3, 5),
+					_Utils_Tuple2(4, 5),
+					_Utils_Tuple2(5, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 5),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(3, 3),
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(4, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 5),
+					_Utils_Tuple2(6, 5),
+					_Utils_Tuple2(8, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 4),
+					_Utils_Tuple2(4, 5),
+					_Utils_Tuple2(5, 5),
+					_Utils_Tuple2(6, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 5),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(4, 3),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(5, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 5),
+					_Utils_Tuple2(7, 5),
+					_Utils_Tuple2(9, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 5),
+					_Utils_Tuple2(6, 5),
+					_Utils_Tuple2(7, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(3, 5),
+					_Utils_Tuple2(4, 4),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 5),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(5, 3),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(6, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 5),
+					_Utils_Tuple2(8, 5),
+					_Utils_Tuple2(10, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 5),
+					_Utils_Tuple2(7, 5),
+					_Utils_Tuple2(8, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(4, 5),
+					_Utils_Tuple2(5, 4),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(6, 3),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(7, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 5),
+					_Utils_Tuple2(9, 5),
+					_Utils_Tuple2(11, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 5),
+					_Utils_Tuple2(8, 5),
+					_Utils_Tuple2(9, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(5, 5),
+					_Utils_Tuple2(6, 4),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(7, 3),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(8, 2),
+					_Utils_Tuple2(9, 3),
+					_Utils_Tuple2(9, 4),
+					_Utils_Tuple2(8, 5)
+				])
+			]),
+			_List_fromArray(
+			[
+				_List_fromArray(
+				[
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 5),
+					_Utils_Tuple2(9, 5),
+					_Utils_Tuple2(10, 4)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(6, 5),
+					_Utils_Tuple2(7, 4),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(8, 3),
+					_Utils_Tuple2(8, 4),
+					_Utils_Tuple2(9, 5)
+				]),
+				_List_fromArray(
+				[
+					_Utils_Tuple2(9, 2),
+					_Utils_Tuple2(10, 3),
+					_Utils_Tuple2(10, 4),
+					_Utils_Tuple2(9, 5)
+				])
+			]),
+			_List_Nil,
+			_List_Nil,
+			_List_Nil
+		])
+	]);
 var author$project$Main$updateCol = F6(
 	function (ix, iy, tx, ty, value, board) {
 		if (board.b) {
@@ -5467,20 +8916,21 @@ var author$project$Main$updateCol = F6(
 			return _List_Nil;
 		}
 	});
-var author$project$Main$updateRows = F6(
-	function (ix, iy, tx, ty, value, board) {
+var author$project$Main$updateRows = F5(
+	function (iy, tx, ty, value, board) {
 		if (board.b) {
 			var r = board.a;
 			var rs = board.b;
 			return A2(
 				elm$core$List$cons,
 				A6(author$project$Main$updateCol, 0, iy, tx, ty, value, r),
-				A6(author$project$Main$updateRows, 0, iy + 1, tx, ty, value, rs));
+				A5(author$project$Main$updateRows, iy + 1, tx, ty, value, rs));
 		} else {
 			return _List_Nil;
 		}
 	});
 var elm$core$Debug$log = _Debug_log;
+var elm$core$Debug$toString = _Debug_toString;
 var elm$json$Json$Decode$decodeValue = _Json_run;
 var elm$json$Json$Encode$object = function (pairs) {
 	return _Json_wrap(
@@ -5586,13 +9036,14 @@ var author$project$Main$update = F2(
 				var tx = _n0.a;
 				var ty = _n0.b;
 				var newTurn = ((-1) * model.turn) + 3;
-				var newBoard = A6(author$project$Main$updateRows, 0, 0, tx, ty, newTurn, model.board);
+				var newBoard = A5(author$project$Main$updateRows, 0, tx, ty, newTurn, model.board);
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
 							board: newBoard,
-							debugString: elm$core$String$fromInt(tx) + (', ' + elm$core$String$fromInt(ty)),
+							debugString: elm$core$Debug$toString(
+								A4(author$project$Main$getCanoes, author$project$Main$tempCanoeList, 0, tx, ty)),
 							turn: newTurn
 						}),
 					author$project$Main$outputPort(
