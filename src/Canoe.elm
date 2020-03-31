@@ -33,21 +33,21 @@ type alias JSONMessage =
 
 type alias Model =
   { nameInProgress : String
-  , board : List (Int)
+  , board : List ( List (Int) )
   , lastCell : Int
   , turn : Int
   , currentTimer : Int
   , debugString : String
   }
 
-buildDefault : List (Int)
+buildDefault : List ( List (Int) )
 buildDefault = 
-  [-1,  0,  0, -1, -1, -1, -1, -1, -1, -1,  0,  0, -1,
-  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-  -1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, -1,
-  -1, -1, -1,  0,  0,  0,  0,  0,  0,  0, -1, -1, -1]
+  [[-1,  0,  0, -1, -1, -1, -1, -1, -1, -1,  0,  0, -1],
+  [0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],
+  [0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],
+  [0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0],
+  [-1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, -1],
+  [-1, -1, -1,  0,  0,  0,  0,  0,  0,  0, -1, -1, -1]]
 
 init : () -> (Model, Cmd Msg)
 init _ =
@@ -84,7 +84,7 @@ type Msg
   --| GetScore Json.Encode.Value         -- 200
   --| GetChat Json.Encode.Value              -- 202
   --| SetActiveColor (Maybe Color)
-  | AddMove Int
+  | AddMove Int Int
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -112,7 +112,7 @@ update msg model =
       )
 
     GetJSON json ->
-      case (Json.Decode.decodeValue decodeJSON json) of
+      case Json.Decode.decodeValue decodeJSON json of
         Ok {action, content} ->
           case action of
             "update_chat" ->
@@ -135,12 +135,12 @@ update msg model =
 
 
     -- Add move.
-    AddMove n ->
+    AddMove tx ty ->
       let
         newTurn = -1*model.turn+3
-        newBoard = updateBoard 0 n newTurn model.board
+        newBoard = updateRows 0 tx ty newTurn model.board
       in
-        ( { model | debugString = String.fromInt n, turn = newTurn, board = newBoard}, 
+        ( { model | debugString = String.fromInt tx ++ ", " ++ String.fromInt ty, turn = newTurn, board = newBoard}, 
           outputPort
             ( Json.Encode.encode
               0
@@ -150,14 +150,23 @@ update msg model =
         )
     
 
-updateBoard : Int -> Int -> Int -> List (Int) -> List (Int)
-updateBoard current target value board =
+updateRows : Int -> Int -> Int -> Int -> List ( List (Int )) -> List ( List (Int) )
+updateRows iy tx ty value board =
   case board of
-    x::xs ->
-      if current == target then
-        value :: xs
+    r::rs ->
+      updateCol 0 iy tx ty value r::updateRows (iy+1) tx ty value rs
+    _ ->
+      []
+
+      
+updateCol : Int -> Int -> Int -> Int -> Int -> List (Int ) -> List (Int)
+updateCol ix iy tx ty value board =
+  case board of
+    c::cs ->
+      if (ix, iy) == (tx, ty) then
+        value :: cs
       else
-        x :: updateBoard (current+1) target value xs
+        c :: updateCol (ix+1) iy tx ty value cs
     _ ->
       []
 
@@ -192,8 +201,8 @@ subscriptions _ =
 -}
 
 -- VIEW
-drawCells : Int -> List (Int) -> List (Html Msg)
-drawCells index remainingCells =
+drawCells : Int -> Int -> List (Int) -> List (Html Msg)
+drawCells x y remainingCells =
   case remainingCells of
     [] ->
       []
@@ -201,21 +210,28 @@ drawCells index remainingCells =
       case v of
         0 ->
           div [class "c"]
-          [ div [ class "s", onClick (AddMove index) ] [] ] :: drawCells (index+1) vs
+          [ div [ class "s", onClick (AddMove x y) ] [] ] :: drawCells (x+1) y vs
         1 ->
           div [class "c"]
-          [ div [ class "s red" ] [] ] :: drawCells (index+1) vs
+          [ div [ class "s red" ] [] ] :: drawCells (x+1) y vs
         2 ->
           div [class "c"]
-          [ div [ class "s blue" ] [] ] :: drawCells (index+1) vs
+          [ div [ class "s blue" ] [] ] :: drawCells (x+1) y vs
         _ ->
-          div [class "c"] [] :: drawCells (index+1) vs
+          div [class "c"] [] :: drawCells (x+1) y vs
 
+drawRows : Int -> List ( List (Int)) -> List (Html Msg)
+drawRows y remainingRows =
+  case remainingRows of
+    [] ->
+      []
+    r::rs ->
+      List.append (drawCells 0 y r) (drawRows (y+1) rs)
 
 view : Model -> Html Msg
 view model =
   let
-    drawBoard board = drawCells 0 board
+    drawBoard board = drawRows 0 board
 
   in 
     div [ class "container"]

@@ -4489,7 +4489,20 @@ var elm$core$Set$toList = function (_n0) {
 	return elm$core$Dict$keys(dict);
 };
 var author$project$Main$buildDefault = _List_fromArray(
-	[-1, 0, 0, -1, -1, -1, -1, -1, -1, -1, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1]);
+	[
+		_List_fromArray(
+		[-1, 0, 0, -1, -1, -1, -1, -1, -1, -1, 0, 0, -1]),
+		_List_fromArray(
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+		_List_fromArray(
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+		_List_fromArray(
+		[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]),
+		_List_fromArray(
+		[-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1]),
+		_List_fromArray(
+		[-1, -1, -1, 0, 0, 0, 0, 0, 0, 0, -1, -1, -1])
+	]);
 var elm$core$Basics$False = {$: 'False'};
 var elm$core$Basics$True = {$: 'True'};
 var elm$core$Result$isOk = function (result) {
@@ -5439,15 +5452,30 @@ var author$project$Main$decodeJSON = A3(
 	A2(elm$json$Json$Decode$field, 'content', elm$json$Json$Decode$value));
 var elm$json$Json$Encode$string = _Json_wrap;
 var author$project$Main$outputPort = _Platform_outgoingPort('outputPort', elm$json$Json$Encode$string);
-var author$project$Main$updateBoard = F4(
-	function (current, target, value, board) {
+var author$project$Main$updateCol = F6(
+	function (ix, iy, tx, ty, value, board) {
 		if (board.b) {
-			var x = board.a;
-			var xs = board.b;
-			return _Utils_eq(current, target) ? A2(elm$core$List$cons, value, xs) : A2(
+			var c = board.a;
+			var cs = board.b;
+			return _Utils_eq(
+				_Utils_Tuple2(ix, iy),
+				_Utils_Tuple2(tx, ty)) ? A2(elm$core$List$cons, value, cs) : A2(
 				elm$core$List$cons,
-				x,
-				A4(author$project$Main$updateBoard, current + 1, target, value, xs));
+				c,
+				A6(author$project$Main$updateCol, ix + 1, iy, tx, ty, value, cs));
+		} else {
+			return _List_Nil;
+		}
+	});
+var author$project$Main$updateRows = F6(
+	function (ix, iy, tx, ty, value, board) {
+		if (board.b) {
+			var r = board.a;
+			var rs = board.b;
+			return A2(
+				elm$core$List$cons,
+				A6(author$project$Main$updateCol, 0, iy, tx, ty, value, r),
+				A6(author$project$Main$updateRows, 0, iy + 1, tx, ty, value, rs));
 		} else {
 			return _List_Nil;
 		}
@@ -5555,15 +5583,16 @@ var author$project$Main$update = F2(
 										elm$json$Json$Encode$string(''))
 									])))));
 			default:
-				var n = _n0.a;
+				var tx = _n0.a;
+				var ty = _n0.b;
 				var newTurn = ((-1) * model.turn) + 3;
-				var newBoard = A4(author$project$Main$updateBoard, 0, n, newTurn, model.board);
+				var newBoard = A6(author$project$Main$updateRows, 0, 0, tx, ty, newTurn, model.board);
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
 							board: newBoard,
-							debugString: elm$core$String$fromInt(n),
+							debugString: elm$core$String$fromInt(tx) + (', ' + elm$core$String$fromInt(ty)),
 							turn: newTurn
 						}),
 					author$project$Main$outputPort(
@@ -5582,9 +5611,10 @@ var author$project$Main$update = F2(
 									])))));
 		}
 	});
-var author$project$Main$AddMove = function (a) {
-	return {$: 'AddMove', a: a};
-};
+var author$project$Main$AddMove = F2(
+	function (a, b) {
+		return {$: 'AddMove', a: a, b: b};
+	});
 var elm$json$Json$Decode$map = _Json_map1;
 var elm$json$Json$Decode$succeed = _Json_succeed;
 var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
@@ -5625,8 +5655,8 @@ var elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		elm$json$Json$Decode$succeed(msg));
 };
-var author$project$Main$drawCells = F2(
-	function (index, remainingCells) {
+var author$project$Main$drawCells = F3(
+	function (x, y, remainingCells) {
 		if (!remainingCells.b) {
 			return _List_Nil;
 		} else {
@@ -5650,11 +5680,11 @@ var author$project$Main$drawCells = F2(
 										[
 											elm$html$Html$Attributes$class('s'),
 											elm$html$Html$Events$onClick(
-											author$project$Main$AddMove(index))
+											A2(author$project$Main$AddMove, x, y))
 										]),
 									_List_Nil)
 								])),
-						A2(author$project$Main$drawCells, index + 1, vs));
+						A3(author$project$Main$drawCells, x + 1, y, vs));
 				case 1:
 					return A2(
 						elm$core$List$cons,
@@ -5674,7 +5704,7 @@ var author$project$Main$drawCells = F2(
 										]),
 									_List_Nil)
 								])),
-						A2(author$project$Main$drawCells, index + 1, vs));
+						A3(author$project$Main$drawCells, x + 1, y, vs));
 				case 2:
 					return A2(
 						elm$core$List$cons,
@@ -5694,7 +5724,7 @@ var author$project$Main$drawCells = F2(
 										]),
 									_List_Nil)
 								])),
-						A2(author$project$Main$drawCells, index + 1, vs));
+						A3(author$project$Main$drawCells, x + 1, y, vs));
 				default:
 					return A2(
 						elm$core$List$cons,
@@ -5705,8 +5735,29 @@ var author$project$Main$drawCells = F2(
 									elm$html$Html$Attributes$class('c')
 								]),
 							_List_Nil),
-						A2(author$project$Main$drawCells, index + 1, vs));
+						A3(author$project$Main$drawCells, x + 1, y, vs));
 			}
+		}
+	});
+var elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3(elm$core$List$foldr, elm$core$List$cons, ys, xs);
+		}
+	});
+var author$project$Main$drawRows = F2(
+	function (y, remainingRows) {
+		if (!remainingRows.b) {
+			return _List_Nil;
+		} else {
+			var r = remainingRows.a;
+			var rs = remainingRows.b;
+			return A2(
+				elm$core$List$append,
+				A3(author$project$Main$drawCells, 0, y, r),
+				A2(author$project$Main$drawRows, y + 1, rs));
 		}
 	});
 var elm$html$Html$em = _VirtualDom_node('em');
@@ -5716,7 +5767,7 @@ var elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var elm$html$Html$text = elm$virtual_dom$VirtualDom$text;
 var author$project$Main$view = function (model) {
 	var drawBoard = function (board) {
-		return A2(author$project$Main$drawCells, 0, board);
+		return A2(author$project$Main$drawRows, 0, board);
 	};
 	return A2(
 		elm$html$Html$div,
