@@ -4401,9 +4401,9 @@ function _Browser_load(url)
 		}
 	}));
 }
-var author$project$Main$Model = F6(
-	function (nameInProgress, board, lastCell, turn, currentTimer, debugString) {
-		return {board: board, currentTimer: currentTimer, debugString: debugString, lastCell: lastCell, nameInProgress: nameInProgress, turn: turn};
+var author$project$Main$Model = F8(
+	function (nameInProgress, board, selectedReds, selectedBlues, lastCell, turn, currentTimer, debugString) {
+		return {board: board, currentTimer: currentTimer, debugString: debugString, lastCell: lastCell, nameInProgress: nameInProgress, selectedBlues: selectedBlues, selectedReds: selectedReds, turn: turn};
 	});
 var elm$core$Basics$negate = function (n) {
 	return -n;
@@ -4900,9 +4900,18 @@ var elm$json$Json$Decode$errorToStringHelp = F2(
 	});
 var elm$core$Platform$Cmd$batch = _Platform_batch;
 var elm$core$Platform$Cmd$none = elm$core$Platform$Cmd$batch(_List_Nil);
+var elm$core$Basics$identity = function (x) {
+	return x;
+};
+var elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
+var elm$core$Dict$empty = elm$core$Dict$RBEmpty_elm_builtin;
+var elm$core$Set$Set_elm_builtin = function (a) {
+	return {$: 'Set_elm_builtin', a: a};
+};
+var elm$core$Set$empty = elm$core$Set$Set_elm_builtin(elm$core$Dict$empty);
 var author$project$Main$init = function (_n0) {
 	return _Utils_Tuple2(
-		A6(author$project$Main$Model, 'board not really implemented', author$project$Main$buildDefault, 3, 1, 0, ''),
+		A8(author$project$Main$Model, 'board not really implemented', author$project$Main$buildDefault, elm$core$Set$empty, elm$core$Set$empty, 3, 1, 0, ''),
 		elm$core$Platform$Cmd$none);
 };
 var author$project$Main$GetJSON = function (a) {
@@ -4921,8 +4930,6 @@ var elm$time$Time$Every = F2(
 	function (a, b) {
 		return {$: 'Every', a: a, b: b};
 	});
-var elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
-var elm$core$Dict$empty = elm$core$Dict$RBEmpty_elm_builtin;
 var elm$core$Task$succeed = _Scheduler_succeed;
 var elm$time$Time$State = F2(
 	function (taggers, processes) {
@@ -5373,9 +5380,6 @@ var elm$core$Task$sequence = function (tasks) {
 		elm$core$Task$succeed(_List_Nil),
 		tasks);
 };
-var elm$core$Basics$identity = function (x) {
-	return x;
-};
 var elm$time$Time$Posix = function (a) {
 	return {$: 'Posix', a: a};
 };
@@ -5438,6 +5442,99 @@ var author$project$Main$subscriptions = function (_n0) {
 				author$project$Main$inputPort(author$project$Main$GetJSON)
 			]));
 };
+var elm$core$Set$insert = F2(
+	function (key, _n0) {
+		var dict = _n0.a;
+		return elm$core$Set$Set_elm_builtin(
+			A3(elm$core$Dict$insert, key, _Utils_Tuple0, dict));
+	});
+var elm$core$Set$fromList = function (list) {
+	return A3(elm$core$List$foldl, elm$core$Set$insert, elm$core$Set$empty, list);
+};
+var elm$core$Dict$filter = F2(
+	function (isGood, dict) {
+		return A3(
+			elm$core$Dict$foldl,
+			F3(
+				function (k, v, d) {
+					return A2(isGood, k, v) ? A3(elm$core$Dict$insert, k, v, d) : d;
+				}),
+			elm$core$Dict$empty,
+			dict);
+	});
+var elm$core$Dict$member = F2(
+	function (key, dict) {
+		var _n0 = A2(elm$core$Dict$get, key, dict);
+		if (_n0.$ === 'Just') {
+			return true;
+		} else {
+			return false;
+		}
+	});
+var elm$core$Dict$intersect = F2(
+	function (t1, t2) {
+		return A2(
+			elm$core$Dict$filter,
+			F2(
+				function (k, _n0) {
+					return A2(elm$core$Dict$member, k, t2);
+				}),
+			t1);
+	});
+var elm$core$Set$intersect = F2(
+	function (_n0, _n1) {
+		var dict1 = _n0.a;
+		var dict2 = _n1.a;
+		return elm$core$Set$Set_elm_builtin(
+			A2(elm$core$Dict$intersect, dict1, dict2));
+	});
+var elm$core$Dict$sizeHelp = F2(
+	function (n, dict) {
+		sizeHelp:
+		while (true) {
+			if (dict.$ === 'RBEmpty_elm_builtin') {
+				return n;
+			} else {
+				var left = dict.d;
+				var right = dict.e;
+				var $temp$n = A2(elm$core$Dict$sizeHelp, n + 1, right),
+					$temp$dict = left;
+				n = $temp$n;
+				dict = $temp$dict;
+				continue sizeHelp;
+			}
+		}
+	});
+var elm$core$Dict$size = function (dict) {
+	return A2(elm$core$Dict$sizeHelp, 0, dict);
+};
+var elm$core$Set$size = function (_n0) {
+	var dict = _n0.a;
+	return elm$core$Dict$size(dict);
+};
+var author$project$Main$checkNewCanoe = F2(
+	function (possibleCanoes, pegs) {
+		checkNewCanoe:
+		while (true) {
+			if (possibleCanoes.b) {
+				var c = possibleCanoes.a;
+				var cs = possibleCanoes.b;
+				var cset = elm$core$Set$fromList(c);
+				if (elm$core$Set$size(
+					A2(elm$core$Set$intersect, cset, pegs)) === 4) {
+					return true;
+				} else {
+					var $temp$possibleCanoes = cs,
+						$temp$pegs = pegs;
+					possibleCanoes = $temp$possibleCanoes;
+					pegs = $temp$pegs;
+					continue checkNewCanoe;
+				}
+			} else {
+				return false;
+			}
+		}
+	});
 var author$project$Main$JSONMessage = F2(
 	function (action, content) {
 		return {action: action, content: content};
@@ -9035,15 +9132,29 @@ var author$project$Main$update = F2(
 			default:
 				var tx = _n0.a;
 				var ty = _n0.b;
+				var selectedReds = (model.turn === 1) ? A2(
+					elm$core$Set$insert,
+					_Utils_Tuple2(tx, ty),
+					model.selectedReds) : model.selectedReds;
+				var selectedBlues = (model.turn === 2) ? A2(
+					elm$core$Set$insert,
+					_Utils_Tuple2(tx, ty),
+					model.selectedBlues) : model.selectedBlues;
+				var possibleCanoes = A4(author$project$Main$getCanoes, author$project$Main$tempCanoeList, 0, tx, ty);
 				var newTurn = ((-1) * model.turn) + 3;
 				var newBoard = A5(author$project$Main$updateRows, 0, tx, ty, newTurn, model.board);
+				var isNewCanoe = A2(
+					author$project$Main$checkNewCanoe,
+					possibleCanoes,
+					(model.turn === 1) ? selectedReds : selectedBlues);
 				return _Utils_Tuple2(
 					_Utils_update(
 						model,
 						{
 							board: newBoard,
-							debugString: elm$core$Debug$toString(
-								A4(author$project$Main$getCanoes, author$project$Main$tempCanoeList, 0, tx, ty)),
+							debugString: elm$core$Debug$toString(isNewCanoe),
+							selectedBlues: selectedBlues,
+							selectedReds: selectedReds,
 							turn: newTurn
 						}),
 					author$project$Main$outputPort(

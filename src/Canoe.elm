@@ -5,6 +5,7 @@ import Html exposing (..)
 import Html.Attributes exposing (id, style, type_, attribute, placeholder, value, class, name, for)
 import Html.Events exposing (onInput, onSubmit, onClick)
 
+import Set exposing (Set)
 import Tuple
 import Time
 import Json.Encode
@@ -35,6 +36,8 @@ type alias JSONMessage =
 type alias Model =
   { nameInProgress : String
   , board : List ( List (Int) )
+  , selectedReds : Set (Int, Int)
+  , selectedBlues : Set (Int, Int)
   , lastCell : Int
   , turn : Int
   , currentTimer : Int
@@ -55,6 +58,8 @@ init _ =
   (Model
     "board not really implemented"
     buildDefault
+    Set.empty
+    Set.empty
     3
     1
     0
@@ -150,8 +155,12 @@ update msg model =
       let
         newTurn = -1*model.turn+3
         newBoard = updateRows 0 tx ty newTurn model.board
+        possibleCanoes = (getCanoes tempCanoeList 0 tx ty)
+        selectedReds = if model.turn == 1 then Set.insert (tx, ty) model.selectedReds else model.selectedReds
+        selectedBlues = if model.turn == 2 then Set.insert (tx, ty) model.selectedBlues else model.selectedBlues
+        isNewCanoe = (checkNewCanoe possibleCanoes (if model.turn == 1 then selectedReds else selectedBlues))
       in
-        ( { model | debugString = Debug.toString (getCanoes tempCanoeList 0 tx ty), turn = newTurn, board = newBoard}, 
+        ( { model | debugString = Debug.toString isNewCanoe, selectedReds = selectedReds, selectedBlues = selectedBlues, turn = newTurn, board = newBoard}, 
           outputPort
             ( Json.Encode.encode
               0
@@ -159,7 +168,20 @@ update msg model =
                 [ ("action", Json.Encode.string "submit_movelist")
                 , ("content", Json.Encode.string "todo") ] ))
         )
-    
+
+checkNewCanoe : List ( List ( Int, Int )) -> Set ( Int, Int ) -> Bool
+checkNewCanoe possibleCanoes pegs =
+  case possibleCanoes of
+    c::cs ->
+      let
+        cset = Set.fromList c
+      in
+        if Set.size (Set.intersect cset pegs) == 4 then
+          True
+        else
+          checkNewCanoe cs pegs
+    _ ->
+      False
 
 getCanoes : List ( List ( List ( List (Int, Int)))) -> Int -> Int -> Int -> List ( List (Int, Int) )
 getCanoes board row tx ty =
