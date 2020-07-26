@@ -1,15 +1,18 @@
-port module Main exposing (Model, Msg(..), init, inputPort, main, outputPort, subscriptions, update, view)
+port module Canoe exposing (Model, Msg(..), init, inputPort, main, outputPort, subscriptions, update, view)
 
 import Browser
 import Html exposing (..)
 import Html.Attributes exposing (id, style, type_, attribute, placeholder, value, class, name, for)
 import Html.Events exposing (onInput, onSubmit, onClick)
 
+import Dict
 import Set exposing (Set)
 import Tuple
 import Time
 import Json.Encode
 import Json.Decode
+
+import User exposing (User)
 
 
 
@@ -35,6 +38,7 @@ type alias JSONMessage =
 
 type alias Model =
   { nameInProgress : String
+  , topMessage : String
   , board : List ( List (Int) )
   , selectedReds : Set (Int, Int)
   , selectedBlues : Set (Int, Int)
@@ -42,6 +46,10 @@ type alias Model =
   , turn : Int
   , currentTimer : Int
   , debugString : String
+  , red : Maybe User
+  , blue : Maybe User
+  , user : Maybe User
+  , users : List ( User )
   }
 
 buildDefault : List ( List (Int) )
@@ -56,14 +64,19 @@ buildDefault =
 init : () -> (Model, Cmd Msg)
 init _ =
   (Model
-    "board not really implemented"
+    ""
+    ""
     buildDefault
     Set.empty
     Set.empty
     3
     1
     0
-    ""
+    "&nbsp;"
+    Nothing
+    Nothing
+    Nothing
+    []
   , Cmd.none )
 
 
@@ -83,29 +96,22 @@ tempCanoeList = [ [ [], [[(0, 1), (1, 0), (2, 0), (3, 1)], [(1, 0), (0, 1), (0, 
 
 type Msg
   = SetName String
-  --| SetColor String
-  --| UpdateSettings
-  --| SetMessage String
-  --| SendMessage
   | NewGame
-  --| SetScore Int Int
-  --| ToggleEmoticons
-  --| InsertEmoticon String
   | Tick Time.Posix
   | Ping Time.Posix
   | GetJSON Json.Encode.Value              -- Parse incoming JSON
+  | GetBoard Json.Encode.Value
+  | GetUsersList Json.Encode.Value
+  | GetUser Json.Encode.Value
+  | GetMessage Json.Encode.Value
   | ConnectToServer Json.Encode.Value      -- 000
-  --| GetBoard Json.Encode.Value             -- 100
-  --| GetPegs Json.Encode.Value         -- 101
-  --| GetScore Json.Encode.Value         -- 200
-  --| GetChat Json.Encode.Value              -- 202
-  --| SetActiveColor (Maybe Color)
+  | SetTeam Int
   | AddMove Int Int
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
-  case Debug.log "MESSAGE: " msg of
+  case msg of -- case Debug.log "MESSAGE: " msg of
     SetName name ->
       ( { model | nameInProgress = name }, Cmd.none )
       
@@ -132,14 +138,60 @@ update msg model =
         Ok {action, content} ->
           case action of
             "update_chat" ->
-              ((Debug.log "Error: unknown code in JSON message" model), Cmd.none ) -- Error: missing code
+              ((Debug.log "Error: not implemented" model), Cmd.none ) -- Error: missing code
+            "update_scoreboard" ->
+              update (GetUsersList content) model
+            "update_user" ->
+              update (GetUser content) model
+            "update_board" ->
+              update (GetBoard content) model
+            "update_message" ->
+              update (GetMessage content) model
             _ ->
               ((Debug.log "Error: unknown code in JSON message" model), Cmd.none ) -- Error: missing code
 
         Err _ ->
           ( { model | debugString = ("Bad JSON: " ++ (Json.Encode.encode 0 json))}, Cmd.none )
 
-    ConnectToServer json ->
+    GetBoard json ->
+      case Json.Decode.decodeValue (Json.Decode.list (Json.Decode.list Json.Decode.int)) json of
+        Ok board ->
+          ( { model | board = board}, Cmd.none )
+        Err _ ->
+          ( { model | debugString = "Critical error getting new board"}, Cmd.none )
+
+    GetUsersList json ->
+      case Json.Decode.decodeValue User.decodeUsersList json of
+        Ok usersList ->
+          let
+            red_user =
+              case List.filter (\z -> .team z == 1) (Dict.values usersList) of
+                []     -> Nothing
+                u::_ -> Just u
+            blue_user =
+              case List.filter (\z -> .team z == 2) (Dict.values usersList) of
+                []     -> Nothing
+                u::_ -> Just u
+          in
+            ( { model | users = Dict.values usersList, red = red_user, blue = blue_user }, Cmd.none )
+        Err _ ->
+          ( { model | debugString = "Error parsing userlist JSON"}, Cmd.none )
+
+    GetUser json ->
+      case Json.Decode.decodeValue User.decodeUser json of
+        Ok user ->
+          ( { model | user = Just user}, Cmd.none )
+        Err _ ->
+          ( { model | debugString = "Error parsing user JSON"}, Cmd.none )
+
+    GetMessage json ->
+      case Json.Decode.decodeValue Json.Decode.string json of
+        Ok message ->
+          ( { model | topMessage = message}, Cmd.none )
+        Err _ ->
+          ( { model | debugString = "Error parsing msg JSON"}, Cmd.none )
+
+    ConnectToServer _ ->
       ( model,
         outputPort
           ( Json.Encode.encode
@@ -149,24 +201,40 @@ update msg model =
               , ("content", Json.Encode.string "") ] ))
         )
 
+    SetTeam team ->
+      ( model, outputPort
+            ( Json.Encode.encode
+              0
+              ( Json.Encode.object
+                [ ("action", Json.Encode.string "game_action")
+                , ("content", Json.Encode.object
+                  [ ("action", Json.Encode.string "set_team"),
+                    ("content", Json.Encode.int team) ] ) ] ) ) )
 
     -- Add move.
     AddMove tx ty ->
       let
         newTurn = -1*model.turn+3
         newBoard = updateRows 0 tx ty newTurn model.board
-        possibleCanoes = (getCanoes tempCanoeList 0 tx ty)
+        possibleCanoes = getCanoes tempCanoeList 0 tx ty
         selectedReds = if model.turn == 1 then Set.insert (tx, ty) model.selectedReds else model.selectedReds
         selectedBlues = if model.turn == 2 then Set.insert (tx, ty) model.selectedBlues else model.selectedBlues
-        isNewCanoe = (checkNewCanoe possibleCanoes (if model.turn == 1 then selectedReds else selectedBlues))
+        isNewCanoe = checkNewCanoe possibleCanoes (if model.turn == 1 then selectedReds else selectedBlues)
       in
         ( { model | debugString = Debug.toString isNewCanoe, selectedReds = selectedReds, selectedBlues = selectedBlues, turn = newTurn, board = newBoard}, 
           outputPort
             ( Json.Encode.encode
               0
               ( Json.Encode.object
-                [ ("action", Json.Encode.string "submit_movelist")
-                , ("content", Json.Encode.string "todo") ] ))
+                [ ("action", Json.Encode.string "game_action")
+                , ("content", Json.Encode.object
+                  [ ("action", Json.Encode.string "submit_movelist"),
+                    ("content", Json.Encode.list Json.Encode.int [tx, ty])
+                  ]
+                )
+              ]
+            )
+          )
         )
 
 checkNewCanoe : List ( List ( Int, Int )) -> Set ( Int, Int ) -> Bool
@@ -232,6 +300,14 @@ decodeJSON =
     JSONMessage
     (Json.Decode.field "action" Json.Decode.string)
     (Json.Decode.field "content" Json.Decode.value)
+    
+
+decodeTeams : Json.Decode.Decoder ( String, String )
+decodeTeams =
+  Json.Decode.map2
+    Tuple.pair
+    (Json.Decode.field "red" Json.Decode.string)
+    (Json.Decode.field "blue" Json.Decode.string)
 
 
 -- SUBSCRIPTIONS
@@ -247,14 +323,6 @@ subscriptions _ =
     , inputPort GetJSON
     ]
 
-{- 
-        <div class="c"></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"></div>
-        <div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s blue"></div></div><div class="c"><div class="s red"></div></div><div class="c"><div class="s red"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div>
-        <div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s red"></div></div><div class="c"><div class="s blue"></div></div><div class="c"><div class="s blue"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div>
-        <div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s blue"></div></div><div class="c"><div class="s red last"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s blue"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div>
-        <div class="c"></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s red"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"></div>
-        <div class="c"></div><div class="c"></div><div class="c"></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"><div class="s"></div></div><div class="c"></div><div class="c"></div><div class="c"></div>
--}
 
 -- VIEW
 drawCells : Int -> Int -> List (Int) -> List (Html Msg)
@@ -284,32 +352,64 @@ drawRows y remainingRows =
     r::rs ->
       List.append (drawCells 0 y r) (drawRows (y+1) rs)
 
+formatName : Maybe User -> String -> List ( Html Msg )
+formatName user color =
+  case user of
+     Nothing ->
+      [ div [ class ("s " ++ color) ] []
+      , span []
+        [ text "Waiting..."
+        , em [] [ text "0" ]
+        ]
+      ]
+     Just u  ->
+      [ div [ class ("s " ++ color) ] []
+        , span []
+          [ text u.nickname
+          , em [] [ text (String.fromInt u.score) ]
+          ]
+        ]
+
+modalSpectators : Maybe User -> Maybe User -> List ( User )-> String
+modalSpectators red_user blue_user all_users =
+  String.join ", " (List.map .nickname all_users)
+
+modalUser : Maybe User -> String -> Int -> Html Msg
+modalUser user color teamid =
+  case user of
+     Nothing -> div [ class ("modal_" ++ String.toLower color), onClick (SetTeam teamid) ] [ div [ class "pad" ] [ h3 [] [ text (color ++ " player") ], h4 [] [ text "Click to join" ] ] ]
+     Just u -> div [ class ("inactive modal_" ++ String.toLower color), onClick (SetTeam 0) ] [ div [ class "pad" ] [ h3 [] [ text (color ++ " player") ], h4 [] [ text u.nickname ] ] ]
+
+
+showModal red blue users = 
+  div [ class "lightbox" ]
+  [ div [ class "modal"]
+    [ div [ class "flex_container" ]
+      [ modalUser red "Red" 1
+      , modalUser blue "Blue" 2
+      , div [ class "modal_spectators" ] [ h3 [] [ text "Spectators" ], text (modalSpectators red blue users) ]
+      ]
+    ]
+  ]
+
+
 view : Model -> Html Msg
 view model =
   let
     drawBoard board = drawRows 0 board
-
   in 
     div [ class "container"]
     [ main_ []
-      [ div [class "grid"]
+      [ div [ class "top_message" ] [ text model.topMessage ]
+      , div [] [ text model.debugString ]
+      , div [ class "grid" ]
         ( model.board |> drawBoard )
       , div [ class "requests" ]
         [ div [ class "player-colors" ]
           [ div [ class "player-colors__row" ]
-            [ div [ class "s red" ] []
-            , span []
-              [ text "You"
-              , em [] [ text "0" ]
-              ]
-            ]
+            (formatName model.red "red")
           , div [ class "player-colors__row" ]
-            [ div [ class "s blue" ] []
-            , span []
-              [ text "Opponent"
-              , em [] [ text "0" ]
-              ]
-            ]
+            (formatName model.blue "blue")
           ]
         , div [class "a"]
           [ text "Resign" ]
@@ -317,5 +417,5 @@ view model =
           [ text "Help" ]
         ]
       ]
-    , div [] [ text model.debugString ]
+    , (if (model.red == Nothing || model.blue == Nothing) then showModal model.red model.blue model.users else div [] [])
     ]

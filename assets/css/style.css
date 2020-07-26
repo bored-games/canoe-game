@@ -29,6 +29,13 @@ sidebar {
   box-shadow: -5px 0 5px rgba(0, 0, 0, .03);
 }
 
+.top_message {
+  padding: 2.5rem 0 0;  
+  font-size: 42px;
+  font-weight: 200;
+  color: #565a5e;
+}
+
 .requests {
   flex: 1 1 auto;
   width: 100%;
@@ -73,7 +80,7 @@ sidebar {
   display: flex;
   flex-wrap: wrap;
   align-content: center;
-  margin: 2.5rem;
+  margin: 0 2.5rem;
   flex: 1 1 100%;
 }
 
@@ -131,4 +138,100 @@ sidebar {
   100% {
         box-shadow: 0 0 3px 15px rgba(0, 0, 0, 0);
   }
+}
+
+.lightbox {
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.modal {
+  background: #e5e5e5;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1.0rem 1.0rem 1.5rem 1.0rem;
+  border-radius: 8px;
+  box-shadow: 0 0 15px 8px rgba(0, 0, 0, .2);
+  max-width: 50%;
+}
+
+.flex_container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex_container h3 {
+  text-transform: uppercase;
+  font-size: 16px;
+  margin: 0 0 0.5rem;
+  padding: 0;
+}
+
+.flex_container h4 {
+  font-size: 26px;
+  font-weight: 200;
+  margin: 1.0rem 0.5rem;
+  padding: 0;
+}
+
+.modal_red {
+  font-size: 26px;
+  font-weight: 200;
+  flex: 0 0 50%; 
+  color: rgba(176, 64, 76, 1);
+  text-align: center;
+  cursor: pointer;
+  transition: .25s linear transform;
+}
+
+.modal_red h3 {
+  color: rgba(176, 64, 76, .8) !important;
+  text-align: center;
+}
+
+.modal_blue {
+  flex: 0 0 50%;
+  color: rgba(64, 76, 176, 1);
+  text-align: center;
+  cursor: pointer;
+  transition: .15s linear transform;
+}
+
+
+.modal_blue:hover h4,
+.modal_red:hover h4 {
+  transform: scale(1.1)
+}
+
+.modal .pad {
+  padding: 1.0rem;
+}
+
+.modal_red.inactive,
+.modal_blue.inactive {
+  cursor: default;
+}
+
+.modal_red.inactive:hover h4,
+.modal_blue.inactive:hover h4 {
+  transform: none !important;
+}
+
+.modal_blue h3 {
+  color: rgba(64, 76, 176, 0.8) !important;
+  text-align: center;
+}
+
+.modal_spectators {
+  padding-top: 1.5rem;
+  flex: 1 1 100%;
+  color: #5a5b5c;
+}
+
+.modal_spectators h3 {
+  text-align: center;
 }
