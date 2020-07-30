@@ -5,6 +5,9 @@ import Html exposing (..)
 import Html.Attributes exposing (id, style, type_, attribute, placeholder, value, class, name, for)
 import Html.Events exposing (onInput, onSubmit, onClick)
 
+import Toast
+
+
 import Dict
 import Set exposing (Set)
 import Tuple
@@ -39,7 +42,9 @@ type alias JSONMessage =
 type alias Model =
   { nameInProgress : String
   , topMessage : String
+  , toastMessages :  Toast.Stack Toast.Toast
   , board : List ( List (Int) )
+  , lastMove : (Int, Int)
   , selectedReds : Set (Int, Int)
   , selectedBlues : Set (Int, Int)
   , lastCell : Int
@@ -50,6 +55,8 @@ type alias Model =
   , blue : Maybe User
   , user : Maybe User
   , users : List ( User )
+  , gameOver : Bool
+  , showHelp : Bool
   }
 
 buildDefault : List ( List (Int) )
@@ -66,28 +73,23 @@ init _ =
   (Model
     ""
     ""
+    Toast.initialState
     buildDefault
+    (4, 4)
     Set.empty
     Set.empty
     3
     1
     0
-    "&nbsp;"
+    " "
     Nothing
     Nothing
     Nothing
     []
+    False
+    False
   , Cmd.none )
 
-
-tempCanoeList : List ( List ( List ( List ( Int, Int ))))
-tempCanoeList = [ [ [], [[(0, 1), (1, 0), (2, 0), (3, 1)], [(1, 0), (0, 1), (0, 2), (1, 3)], [(1, 0), (2, 1), (2, 2), (1, 3)]], [[(0, 1), (1, 0), (2, 0), (3, 1)], [(2, 0), (1, 1), (1, 2), (2, 3)], [(2, 0), (3, 1), (3, 2), (2, 3)]], [], [], [], [], [], [], [], [[(9, 1), (10, 0), (11, 0), (12, 1)], [(10, 0), (9, 1), (9, 2), (10, 3)], [(10, 0), (11, 1), (11, 2), (10, 3)]], [[(9, 1), (10, 0), (11, 0), (12, 1)], [(11, 0), (10, 1), (10, 2), (11, 3)], [(11, 0), (12, 1), (12, 2), (11, 3)]], []]
-                , [ [[(0, 1), (1, 2), (2, 2), (3, 1)], [(0, 1), (1, 0), (2, 0), (3, 1)], [(1, 0), (0, 1), (0, 2), (1, 3)]], [[(1, 1), (2, 2), (3, 2), (4, 1)], [(0, 2), (1, 1), (2, 1), (3, 2)], [(2, 0), (1, 1), (1, 2), (2, 3)], [(1, 1), (0, 2), (0, 3), (1, 4)], [(1, 1), (2, 2), (2, 3), (1, 4)]], [[(2, 1), (3, 2), (4, 2), (5, 1)], [(0, 2), (1, 1), (2, 1), (3, 2)], [(1, 2), (2, 1), (3, 1), (4, 2)], [(2, 1), (1, 2), (1, 3), (2, 4)], [(1, 0), (2, 1), (2, 2), (1, 3)], [(2, 1), (3, 2), (3, 3), (2, 4)]], [[(3, 1), (4, 2), (5, 2), (6, 1)], [(0, 1), (1, 2), (2, 2), (3, 1)], [(0, 1), (1, 0), (2, 0), (3, 1)], [(1, 2), (2, 1), (3, 1), (4, 2)], [(2, 2), (3, 1), (4, 1), (5, 2)], [(3, 1), (2, 2), (2, 3), (3, 4)], [(2, 0), (3, 1), (3, 2), (2, 3)], [(3, 1), (4, 2), (4, 3), (3, 4)]], [[(4, 1), (5, 2), (6, 2), (7, 1)], [(1, 1), (2, 2), (3, 2), (4, 1)], [(2, 2), (3, 1), (4, 1), (5, 2)], [(3, 2), (4, 1), (5, 1), (6, 2)], [(4, 1), (3, 2), (3, 3), (4, 4)], [(4, 1), (5, 2), (5, 3), (4, 4)]], [[(5, 1), (6, 2), (7, 2), (8, 1)], [(2, 1), (3, 2), (4, 2), (5, 1)], [(3, 2), (4, 1), (5, 1), (6, 2)], [(4, 2), (5, 1), (6, 1), (7, 2)], [(5, 1), (4, 2), (4, 3), (5, 4)], [(5, 1), (6, 2), (6, 3), (5, 4)]], [[(6, 1), (7, 2), (8, 2), (9, 1)], [(3, 1), (4, 2), (5, 2), (6, 1)], [(4, 2), (5, 1), (6, 1), (7, 2)], [(5, 2), (6, 1), (7, 1), (8, 2)], [(6, 1), (5, 2), (5, 3), (6, 4)], [(6, 1), (7, 2), (7, 3), (6, 4)]], [[(7, 1), (8, 2), (9, 2), (10, 1)], [(4, 1), (5, 2), (6, 2), (7, 1)], [(5, 2), (6, 1), (7, 1), (8, 2)], [(6, 2), (7, 1), (8, 1), (9, 2)], [(7, 1), (6, 2), (6, 3), (7, 4)], [(7, 1), (8, 2), (8, 3), (7, 4)]], [[(8, 1), (9, 2), (10, 2), (11, 1)], [(5, 1), (6, 2), (7, 2), (8, 1)], [(6, 2), (7, 1), (8, 1), (9, 2)], [(7, 2), (8, 1), (9, 1), (10, 2)], [(8, 1), (7, 2), (7, 3), (8, 4)], [(8, 1), (9, 2), (9, 3), (8, 4)]], [[(9, 1), (10, 2), (11, 2), (12, 1)], [(6, 1), (7, 2), (8, 2), (9, 1)], [(7, 2), (8, 1), (9, 1), (10, 2)], [(8, 2), (9, 1), (10, 1), (11, 2)], [(9, 1), (10, 0), (11, 0), (12, 1)], [(10, 0), (9, 1), (9, 2), (10, 3)], [(9, 1), (8, 2), (8, 3), (9, 4)], [(9, 1), (10, 2), (10, 3), (9, 4)]], [[(7, 1), (8, 2), (9, 2), (10, 1)], [(8, 2), (9, 1), (10, 1), (11, 2)], [(9, 2), (10, 1), (11, 1), (12, 2)], [(11, 0), (10, 1), (10, 2), (11, 3)], [(10, 1), (9, 2), (9, 3), (10, 4)], [(10, 1), (11, 2), (11, 3), (10, 4)]], [[(8, 1), (9, 2), (10, 2), (11, 1)], [(9, 2), (10, 1), (11, 1), (12, 2)], [(11, 1), (10, 2), (10, 3), (11, 4)], [(10, 0), (11, 1), (11, 2), (10, 3)], [(11, 1), (12, 2), (12, 3), (11, 4)]], [[(9, 1), (10, 2), (11, 2), (12, 1)], [(9, 1), (10, 0), (11, 0), (12, 1)], [(11, 0), (12, 1), (12, 2), (11, 3)]] ]
-                , [ [[(0, 2), (1, 3), (2, 3), (3, 2)], [(0, 2), (1, 1), (2, 1), (3, 2)], [(1, 0), (0, 1), (0, 2), (1, 3)], [(1, 1), (0, 2), (0, 3), (1, 4)]], [[(1, 2), (2, 3), (3, 3), (4, 2)], [(0, 1), (1, 2), (2, 2), (4, 1)], [(0, 3), (1, 2), (2, 2), (3, 3)], [(1, 2), (2, 1), (3, 1), (4, 2)], [(2, 0), (1, 1), (1, 2), (2, 3)], [(2, 1), (1, 2), (1, 3), (2, 4)]], [[(2, 2), (3, 3), (4, 3), (5, 2)], [(1, 1), (2, 2), (3, 2), (5, 1)], [(0, 1), (1, 2), (2, 2), (3, 1)], [(0, 3), (1, 2), (2, 2), (3, 3)], [(1, 3), (2, 2), (3, 2), (4, 3)], [(2, 2), (3, 1), (4, 1), (5, 2)], [(3, 1), (2, 2), (2, 3), (3, 4)], [(1, 0), (2, 1), (2, 2), (1, 3)], [(1, 1), (2, 2), (2, 3), (1, 4)]], [[(3, 2), (4, 3), (5, 3), (6, 2)], [(0, 2), (1, 3), (2, 3), (3, 2)], [(2, 1), (3, 2), (4, 2), (6, 1)], [(1, 1), (2, 2), (3, 2), (4, 1)], [(0, 2), (1, 1), (2, 1), (3, 2)], [(1, 3), (2, 2), (3, 2), (4, 3)], [(2, 3), (3, 2), (4, 2), (5, 3)], [(3, 2), (4, 1), (5, 1), (6, 2)], [(4, 1), (3, 2), (3, 3), (4, 4)], [(3, 2), (2, 3), (2, 4), (3, 5)], [(2, 0), (3, 1), (3, 2), (2, 3)], [(2, 1), (3, 2), (3, 3), (2, 4)], [(3, 2), (4, 3), (4, 4), (3, 5)]], [[(4, 2), (5, 3), (6, 3), (7, 2)], [(1, 2), (2, 3), (3, 3), (4, 2)], [(3, 1), (4, 2), (5, 2), (7, 1)], [(2, 1), (3, 2), (4, 2), (5, 1)], [(1, 2), (2, 1), (3, 1), (4, 2)], [(2, 3), (3, 2), (4, 2), (5, 3)], [(3, 3), (4, 2), (5, 2), (6, 3)], [(4, 2), (5, 1), (6, 1), (7, 2)], [(5, 1), (4, 2), (4, 3), (5, 4)], [(4, 2), (3, 3), (3, 4), (4, 5)], [(3, 1), (4, 2), (4, 3), (3, 4)], [(4, 2), (5, 3), (5, 4), (4, 5)]], [[(5, 2), (6, 3), (7, 3), (8, 2)], [(2, 2), (3, 3), (4, 3), (5, 2)], [(4, 1), (5, 2), (6, 2), (8, 1)], [(3, 1), (4, 2), (5, 2), (6, 1)], [(2, 2), (3, 1), (4, 1), (5, 2)], [(3, 3), (4, 2), (5, 2), (6, 3)], [(4, 3), (5, 2), (6, 2), (7, 3)], [(5, 2), (6, 1), (7, 1), (8, 2)], [(6, 1), (5, 2), (5, 3), (6, 4)], [(5, 2), (4, 3), (4, 4), (5, 5)], [(4, 1), (5, 2), (5, 3), (4, 4)], [(5, 2), (6, 3), (6, 4), (5, 5)]], [[(6, 2), (7, 3), (8, 3), (9, 2)], [(3, 2), (4, 3), (5, 3), (6, 2)], [(5, 1), (6, 2), (7, 2), (9, 1)], [(4, 1), (5, 2), (6, 2), (7, 1)], [(3, 2), (4, 1), (5, 1), (6, 2)], [(4, 3), (5, 2), (6, 2), (7, 3)], [(5, 3), (6, 2), (7, 2), (8, 3)], [(6, 2), (7, 1), (8, 1), (9, 2)], [(7, 1), (6, 2), (6, 3), (7, 4)], [(6, 2), (5, 3), (5, 4), (6, 5)], [(5, 1), (6, 2), (6, 3), (5, 4)], [(6, 2), (7, 3), (7, 4), (6, 5)]], [[(7, 2), (8, 3), (9, 3), (10, 2)], [(4, 2), (5, 3), (6, 3), (7, 2)], [(6, 1), (7, 2), (8, 2), (10, 1)], [(5, 1), (6, 2), (7, 2), (8, 1)], [(4, 2), (5, 1), (6, 1), (7, 2)], [(5, 3), (6, 2), (7, 2), (8, 3)], [(6, 3), (7, 2), (8, 2), (9, 3)], [(7, 2), (8, 1), (9, 1), (10, 2)], [(8, 1), (7, 2), (7, 3), (8, 4)], [(7, 2), (6, 3), (6, 4), (7, 5)], [(6, 1), (7, 2), (7, 3), (6, 4)], [(7, 2), (8, 3), (8, 4), (7, 5)]], [[(8, 2), (9, 3), (10, 3), (11, 2)], [(5, 2), (6, 3), (7, 3), (8, 2)], [(7, 1), (8, 2), (9, 2), (11, 1)], [(6, 1), (7, 2), (8, 2), (9, 1)], [(5, 2), (6, 1), (7, 1), (8, 2)], [(6, 3), (7, 2), (8, 2), (9, 3)], [(7, 3), (8, 2), (9, 2), (10, 3)], [(8, 2), (9, 1), (10, 1), (11, 2)], [(9, 1), (8, 2), (8, 3), (9, 4)], [(8, 2), (7, 3), (7, 4), (8, 5)], [(7, 1), (8, 2), (8, 3), (7, 4)], [(8, 2), (9, 3), (9, 4), (8, 5)]], [[(9, 2), (10, 3), (11, 3), (12, 2)], [(6, 2), (7, 3), (8, 3), (9, 2)], [(8, 1), (9, 2), (10, 2), (12, 1)], [(7, 1), (8, 2), (9, 2), (10, 1)], [(6, 2), (7, 1), (8, 1), (9, 2)], [(7, 3), (8, 2), (9, 2), (10, 3)], [(8, 3), (9, 2), (10, 2), (11, 3)], [(9, 2), (10, 1), (11, 1), (12, 2)], [(10, 0), (9, 1), (9, 2), (10, 3)], [(10, 1), (9, 2), (9, 3), (10, 4)], [(9, 2), (8, 3), (8, 4), (9, 5)], [(8, 1), (9, 2), (9, 3), (8, 4)], [(9, 2), (10, 3), (10, 4), (9, 5)]], [[(7, 2), (8, 3), (9, 3), (10, 2)], [(8, 1), (9, 2), (10, 2), (11, 1)], [(7, 2), (8, 1), (9, 1), (10, 2)], [(8, 3), (9, 2), (10, 2), (11, 3)], [(9, 3), (10, 2), (11, 2), (12, 3)], [(11, 0), (10, 1), (10, 2), (11, 3)], [(11, 1), (10, 2), (10, 3), (11, 4)], [(9, 1), (10, 2), (10, 3), (9, 4)]], [[(8, 2), (9, 3), (10, 3), (11, 2)], [(9, 1), (10, 2), (11, 2), (12, 1)], [(8, 2), (9, 1), (10, 1), (11, 2)], [(9, 3), (10, 2), (11, 2), (12, 3)], [(10, 0), (11, 1), (11, 2), (10, 3)], [(10, 1), (11, 2), (11, 3), (10, 4)]], [[(9, 2), (10, 3), (11, 3), (12, 2)], [(9, 2), (10, 1), (11, 1), (12, 2)], [(11, 0), (12, 1), (12, 2), (11, 3)], [(11, 1), (12, 2), (12, 3), (11, 4)]] ]
-                , [ [[(0, 3), (1, 4), (2, 4), (3, 3)], [(0, 3), (1, 2), (2, 2), (3, 3)], [(1, 1), (0, 2), (0, 3), (1, 4)]], [[(1, 3), (2, 4), (3, 4), (4, 3)], [(0, 2), (1, 3), (2, 3), (4, 2)], [(1, 3), (2, 2), (3, 2), (4, 3)], [(1, 0), (0, 1), (0, 2), (1, 3)], [(2, 1), (1, 2), (1, 3), (2, 4)], [(1, 0), (2, 1), (2, 2), (1, 3)]], [[(2, 3), (3, 4), (4, 4), (5, 3)], [(1, 2), (2, 3), (3, 3), (5, 2)], [(0, 2), (1, 3), (2, 3), (3, 2)], [(1, 4), (2, 3), (3, 3), (4, 4)], [(2, 3), (3, 2), (4, 2), (5, 3)], [(2, 0), (1, 1), (1, 2), (2, 3)], [(3, 1), (2, 2), (2, 3), (3, 4)], [(3, 2), (2, 3), (2, 4), (3, 5)], [(2, 0), (3, 1), (3, 2), (2, 3)], [(1, 1), (2, 2), (2, 3), (1, 4)]], [[(3, 3), (4, 4), (5, 4), (6, 3)], [(0, 3), (1, 4), (2, 4), (3, 3)], [(2, 2), (3, 3), (4, 3), (6, 2)], [(1, 2), (2, 3), (3, 3), (4, 2)], [(0, 3), (1, 2), (2, 2), (3, 3)], [(1, 4), (2, 3), (3, 3), (4, 4)], [(2, 4), (3, 3), (4, 3), (5, 4)], [(3, 3), (4, 2), (5, 2), (6, 3)], [(4, 1), (3, 2), (3, 3), (4, 4)], [(4, 2), (3, 3), (3, 4), (4, 5)], [(2, 1), (3, 2), (3, 3), (2, 4)]], [[(4, 3), (5, 4), (6, 4), (7, 3)], [(1, 3), (2, 4), (3, 4), (4, 3)], [(3, 2), (4, 3), (5, 3), (7, 2)], [(2, 2), (3, 3), (4, 3), (5, 2)], [(1, 3), (2, 2), (3, 2), (4, 3)], [(2, 4), (3, 3), (4, 3), (5, 4)], [(3, 4), (4, 3), (5, 3), (6, 4)], [(4, 3), (5, 2), (6, 2), (7, 3)], [(5, 1), (4, 2), (4, 3), (5, 4)], [(5, 2), (4, 3), (4, 4), (5, 5)], [(3, 1), (4, 2), (4, 3), (3, 4)], [(3, 2), (4, 3), (4, 4), (3, 5)]], [[(5, 3), (6, 4), (7, 4), (8, 3)], [(2, 3), (3, 4), (4, 4), (5, 3)], [(4, 2), (5, 3), (6, 3), (8, 2)], [(3, 2), (4, 3), (5, 3), (6, 2)], [(2, 3), (3, 2), (4, 2), (5, 3)], [(3, 4), (4, 3), (5, 3), (6, 4)], [(4, 4), (5, 3), (6, 3), (7, 4)], [(5, 3), (6, 2), (7, 2), (8, 3)], [(6, 1), (5, 2), (5, 3), (6, 4)], [(6, 2), (5, 3), (5, 4), (6, 5)], [(4, 1), (5, 2), (5, 3), (4, 4)], [(4, 2), (5, 3), (5, 4), (4, 5)]], [[(6, 3), (7, 4), (8, 4), (9, 3)], [(3, 3), (4, 4), (5, 4), (6, 3)], [(5, 2), (6, 3), (7, 3), (9, 2)], [(4, 2), (5, 3), (6, 3), (7, 2)], [(3, 3), (4, 2), (5, 2), (6, 3)], [(4, 4), (5, 3), (6, 3), (7, 4)], [(5, 4), (6, 3), (7, 3), (8, 4)], [(6, 3), (7, 2), (8, 2), (9, 3)], [(7, 1), (6, 2), (6, 3), (7, 4)], [(7, 2), (6, 3), (6, 4), (7, 5)], [(5, 1), (6, 2), (6, 3), (5, 4)], [(5, 2), (6, 3), (6, 4), (5, 5)]], [[(7, 3), (8, 4), (9, 4), (10, 3)], [(4, 3), (5, 4), (6, 4), (7, 3)], [(6, 2), (7, 3), (8, 3), (10, 2)], [(5, 2), (6, 3), (7, 3), (8, 2)], [(4, 3), (5, 2), (6, 2), (7, 3)], [(5, 4), (6, 3), (7, 3), (8, 4)], [(6, 4), (7, 3), (8, 3), (9, 4)], [(7, 3), (8, 2), (9, 2), (10, 3)], [(8, 1), (7, 2), (7, 3), (8, 4)], [(8, 2), (7, 3), (7, 4), (8, 5)], [(6, 1), (7, 2), (7, 3), (6, 4)], [(6, 2), (7, 3), (7, 4), (6, 5)]], [[(8, 3), (9, 4), (10, 4), (11, 3)], [(5, 3), (6, 4), (7, 4), (8, 3)], [(7, 2), (8, 3), (9, 3), (11, 2)], [(6, 2), (7, 3), (8, 3), (9, 2)], [(5, 3), (6, 2), (7, 2), (8, 3)], [(6, 4), (7, 3), (8, 3), (9, 4)], [(7, 4), (8, 3), (9, 3), (10, 4)], [(8, 3), (9, 2), (10, 2), (11, 3)], [(9, 1), (8, 2), (8, 3), (9, 4)], [(9, 2), (8, 3), (8, 4), (9, 5)], [(7, 1), (8, 2), (8, 3), (7, 4)], [(7, 2), (8, 3), (8, 4), (7, 5)]], [[(9, 3), (10, 4), (11, 4), (12, 3)], [(6, 3), (7, 4), (8, 4), (9, 3)], [(8, 2), (9, 3), (10, 3), (12, 2)], [(7, 2), (8, 3), (9, 3), (10, 2)], [(6, 3), (7, 2), (8, 2), (9, 3)], [(7, 4), (8, 3), (9, 3), (10, 4)], [(8, 4), (9, 3), (10, 3), (11, 4)], [(9, 3), (10, 2), (11, 2), (12, 3)], [(10, 1), (9, 2), (9, 3), (10, 4)], [(8, 1), (9, 2), (9, 3), (8, 4)], [(8, 2), (9, 3), (9, 4), (8, 5)]], [[(7, 3), (8, 4), (9, 4), (10, 3)], [(8, 2), (9, 3), (10, 3), (11, 2)], [(7, 3), (8, 2), (9, 2), (10, 3)], [(8, 4), (9, 3), (10, 3), (11, 4)], [(10, 0), (9, 1), (9, 2), (10, 3)], [(11, 1), (10, 2), (10, 3), (11, 4)], [(10, 0), (11, 1), (11, 2), (10, 3)], [(9, 1), (10, 2), (10, 3), (9, 4)], [(9, 2), (10, 3), (10, 4), (9, 5)]], [[(8, 3), (9, 4), (10, 4), (11, 3)], [(9, 2), (10, 3), (11, 3), (12, 2)], [(8, 3), (9, 2), (10, 2), (11, 3)], [(11, 0), (10, 1), (10, 2), (11, 3)], [(11, 0), (12, 1), (12, 2), (11, 3)], [(10, 1), (11, 2), (11, 3), (10, 4)]], [[(9, 3), (10, 4), (11, 4), (12, 3)], [(9, 3), (10, 2), (11, 2), (12, 3)], [(11, 1), (12, 2), (12, 3), (11, 4)]] ]
-                , [ [], [[(0, 3), (1, 4), (2, 4), (4, 3)], [(1, 4), (2, 3), (3, 3), (4, 4)], [(1, 1), (0, 2), (0, 3), (1, 4)], [(1, 1), (2, 2), (2, 3), (1, 4)]], [[(2, 4), (3, 5), (4, 5), (5, 4)], [(1, 3), (2, 4), (3, 4), (5, 3)], [(0, 3), (1, 4), (2, 4), (3, 3)], [(2, 4), (3, 3), (4, 3), (5, 4)], [(2, 1), (1, 2), (1, 3), (2, 4)], [(3, 2), (2, 3), (2, 4), (3, 5)], [(2, 1), (3, 2), (3, 3), (2, 4)]], [[(3, 4), (4, 5), (5, 5), (6, 4)], [(2, 3), (3, 4), (4, 4), (6, 3)], [(1, 3), (2, 4), (3, 4), (4, 3)], [(3, 4), (4, 3), (5, 3), (6, 4)], [(3, 1), (2, 2), (2, 3), (3, 4)], [(4, 2), (3, 3), (3, 4), (4, 5)], [(3, 1), (4, 2), (4, 3), (3, 4)]], [[(4, 4), (5, 5), (6, 5), (7, 4)], [(3, 3), (4, 4), (5, 4), (7, 3)], [(2, 3), (3, 4), (4, 4), (5, 3)], [(1, 4), (2, 3), (3, 3), (4, 4)], [(3, 5), (4, 4), (5, 4), (6, 5)], [(4, 4), (5, 3), (6, 3), (7, 4)], [(4, 1), (3, 2), (3, 3), (4, 4)], [(5, 2), (4, 3), (4, 4), (5, 5)], [(4, 1), (5, 2), (5, 3), (4, 4)], [(3, 2), (4, 3), (4, 4), (3, 5)]], [[(5, 4), (6, 5), (7, 5), (8, 4)], [(2, 4), (3, 5), (4, 5), (5, 4)], [(4, 3), (5, 4), (6, 4), (8, 3)], [(3, 3), (4, 4), (5, 4), (6, 3)], [(2, 4), (3, 3), (4, 3), (5, 4)], [(3, 5), (4, 4), (5, 4), (6, 5)], [(4, 5), (5, 4), (6, 4), (7, 5)], [(5, 4), (6, 3), (7, 3), (8, 4)], [(5, 1), (4, 2), (4, 3), (5, 4)], [(6, 2), (5, 3), (5, 4), (6, 5)], [(5, 1), (6, 2), (6, 3), (5, 4)], [(4, 2), (5, 3), (5, 4), (4, 5)]], [[(6, 4), (7, 5), (8, 5), (9, 4)], [(3, 4), (4, 5), (5, 5), (6, 4)], [(5, 3), (6, 4), (7, 4), (9, 3)], [(4, 3), (5, 4), (6, 4), (7, 3)], [(3, 4), (4, 3), (5, 3), (6, 4)], [(4, 5), (5, 4), (6, 4), (7, 5)], [(5, 5), (6, 4), (7, 4), (8, 5)], [(6, 4), (7, 3), (8, 3), (9, 4)], [(6, 1), (5, 2), (5, 3), (6, 4)], [(7, 2), (6, 3), (6, 4), (7, 5)], [(6, 1), (7, 2), (7, 3), (6, 4)], [(5, 2), (6, 3), (6, 4), (5, 5)]], [[(7, 4), (8, 5), (9, 5), (10, 4)], [(4, 4), (5, 5), (6, 5), (7, 4)], [(6, 3), (7, 4), (8, 4), (10, 3)], [(5, 3), (6, 4), (7, 4), (8, 3)], [(4, 4), (5, 3), (6, 3), (7, 4)], [(5, 5), (6, 4), (7, 4), (8, 5)], [(6, 5), (7, 4), (8, 4), (9, 5)], [(7, 4), (8, 3), (9, 3), (10, 4)], [(7, 1), (6, 2), (6, 3), (7, 4)], [(8, 2), (7, 3), (7, 4), (8, 5)], [(7, 1), (8, 2), (8, 3), (7, 4)], [(6, 2), (7, 3), (7, 4), (6, 5)]], [[(5, 4), (6, 5), (7, 5), (8, 4)], [(7, 3), (8, 4), (9, 4), (11, 3)], [(6, 3), (7, 4), (8, 4), (9, 3)], [(5, 4), (6, 3), (7, 3), (8, 4)], [(6, 5), (7, 4), (8, 4), (9, 5)], [(8, 4), (9, 3), (10, 3), (11, 4)], [(8, 1), (7, 2), (7, 3), (8, 4)], [(9, 2), (8, 3), (8, 4), (9, 5)], [(8, 1), (9, 2), (9, 3), (8, 4)], [(7, 2), (8, 3), (8, 4), (7, 5)]], [[(6, 4), (7, 5), (8, 5), (9, 4)], [(8, 3), (9, 4), (10, 4), (12, 3)], [(7, 3), (8, 4), (9, 4), (10, 3)], [(6, 4), (7, 3), (8, 3), (9, 4)], [(9, 1), (8, 2), (8, 3), (9, 4)], [(9, 1), (10, 2), (10, 3), (9, 4)], [(8, 2), (9, 3), (9, 4), (8, 5)]], [[(7, 4), (8, 5), (9, 5), (10, 4)], [(8, 3), (9, 4), (10, 4), (11, 3)], [(7, 4), (8, 3), (9, 3), (10, 4)], [(10, 1), (9, 2), (9, 3), (10, 4)], [(10, 1), (11, 2), (11, 3), (10, 4)], [(9, 2), (10, 3), (10, 4), (9, 5)]], [[(9, 3), (10, 4), (11, 4), (12, 3)], [(8, 4), (9, 3), (10, 3), (11, 4)], [(11, 1), (10, 2), (10, 3), (11, 4)], [(11, 1), (12, 2), (12, 3), (11, 4)]], [] ]
-                , [ [], [], [], [[(2, 4), (3, 5), (4, 5), (6, 4)], [(3, 5), (4, 4), (5, 4), (6, 5)], [(3, 2), (2, 3), (2, 4), (3, 5)], [(3, 2), (4, 3), (4, 4), (3, 5)]], [[(3, 4), (4, 5), (5, 5), (7, 4)], [(2, 4), (3, 5), (4, 5), (5, 4)], [(4, 5), (5, 4), (6, 4), (7, 5)], [(4, 2), (3, 3), (3, 4), (4, 5)], [(4, 2), (5, 3), (5, 4), (4, 5)]], [[(4, 4), (5, 5), (6, 5), (8, 4)], [(3, 4), (4, 5), (5, 5), (6, 4)], [(5, 5), (6, 4), (7, 4), (8, 5)], [(5, 2), (4, 3), (4, 4), (5, 5)], [(5, 2), (6, 3), (6, 4), (5, 5)]], [[(5, 4), (6, 5), (7, 5), (9, 4)], [(4, 4), (5, 5), (6, 5), (7, 4)], [(3, 5), (4, 4), (5, 4), (6, 5)], [(6, 5), (7, 4), (8, 4), (9, 5)], [(6, 2), (5, 3), (5, 4), (6, 5)], [(6, 2), (7, 3), (7, 4), (6, 5)]], [[(6, 4), (7, 5), (8, 5), (10, 4)], [(5, 4), (6, 5), (7, 5), (8, 4)], [(4, 5), (5, 4), (6, 4), (7, 5)], [(7, 2), (6, 3), (6, 4), (7, 5)], [(7, 2), (8, 3), (8, 4), (7, 5)]], [[(7, 4), (8, 5), (9, 5), (11, 4)], [(6, 4), (7, 5), (8, 5), (9, 4)], [(5, 5), (6, 4), (7, 4), (8, 5)], [(8, 2), (7, 3), (7, 4), (8, 5)], [(8, 2), (9, 3), (9, 4), (8, 5)]], [[(7, 4), (8, 5), (9, 5), (10, 4)], [(6, 5), (7, 4), (8, 4), (9, 5)], [(9, 2), (8, 3), (8, 4), (9, 5)], [(9, 2), (10, 3), (10, 4), (9, 5)]], [], [], [] ]
-                ]
 
 
 
@@ -104,9 +106,17 @@ type Msg
   | GetUsersList Json.Encode.Value
   | GetUser Json.Encode.Value
   | GetMessage Json.Encode.Value
-  | ConnectToServer Json.Encode.Value      -- 000
+  | GetFlashMessage Json.Encode.Value
+  | GetLastMove Json.Encode.Value
+  | GameOver Json.Encode.Value
+  | SendNewGame
+  | SendResign
+  | ConnectToServer Json.Encode.Value
   | SetTeam Int
   | AddMove Int Int
+  | AddToastMessage (Toast.Msg Toast.Toast)
+  | TestToast String
+  | ToggleHelp
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -116,7 +126,8 @@ update msg model =
       ( { model | nameInProgress = name }, Cmd.none )
       
     NewGame -> -- TODO!
-      ( { model | nameInProgress = "New game" }, Cmd.none )
+      ( { model | gameOver = False }, Cmd.none )
+      
 
     Tick newTime ->
       let
@@ -147,6 +158,12 @@ update msg model =
               update (GetBoard content) model
             "update_message" ->
               update (GetMessage content) model
+            "update_flash_msg" ->
+              update (GetFlashMessage content) model
+            "update_last_move" ->
+              update (GetLastMove content) model
+            "game_over" ->
+              update (GameOver content) model
             _ ->
               ((Debug.log "Error: unknown code in JSON message" model), Cmd.none ) -- Error: missing code
 
@@ -191,6 +208,28 @@ update msg model =
         Err _ ->
           ( { model | debugString = "Error parsing msg JSON"}, Cmd.none )
 
+    GetFlashMessage json ->
+      case Json.Decode.decodeValue Json.Decode.string json of
+        Ok message ->
+          ( { model | debugString = message}, Cmd.none )
+            |> addToast (Toast.Success "" message)
+        Err _ ->
+          ( { model | debugString = "Error parsing Flash Message JSON"}, Cmd.none )
+
+    GetLastMove json ->
+      case Json.Decode.decodeValue decodeMoveTuple json of
+        Ok tuple ->
+          ( { model | lastMove = tuple}, Cmd.none )
+        Err _ ->
+          ( { model | debugString = "Error parsing Flash Message JSON"}, Cmd.none )
+
+    GameOver json ->
+      case Json.Decode.decodeValue Json.Decode.string json of
+        Ok message ->
+          ( { model | gameOver = True, topMessage = message }, Cmd.none )
+        Err _ ->
+          ( { model | debugString = "Error parsing user JSON"}, Cmd.none )
+
     ConnectToServer _ ->
       ( model,
         outputPort
@@ -200,6 +239,28 @@ update msg model =
               [ ("action", Json.Encode.string "create_user")
               , ("content", Json.Encode.string "") ] ))
         )
+
+    SendNewGame ->
+      ( model,
+        outputPort
+          ( Json.Encode.encode
+              0
+              ( Json.Encode.object
+                [ ("action", Json.Encode.string "game_action")
+                , ("content", Json.Encode.object
+                  [ ("action", Json.Encode.string "new_game"),
+                    ("content", Json.Encode.string "") ] ) ] ) ) )
+
+    SendResign ->
+      ( model,
+        outputPort
+          ( Json.Encode.encode
+              0
+              ( Json.Encode.object
+                [ ("action", Json.Encode.string "game_action")
+                , ("content", Json.Encode.object
+                  [ ("action", Json.Encode.string "resign"),
+                    ("content", Json.Encode.string "") ] ) ] ) ) )
 
     SetTeam team ->
       ( model, outputPort
@@ -215,13 +276,8 @@ update msg model =
     AddMove tx ty ->
       let
         newTurn = -1*model.turn+3
-        newBoard = updateRows 0 tx ty newTurn model.board
-        possibleCanoes = getCanoes tempCanoeList 0 tx ty
-        selectedReds = if model.turn == 1 then Set.insert (tx, ty) model.selectedReds else model.selectedReds
-        selectedBlues = if model.turn == 2 then Set.insert (tx, ty) model.selectedBlues else model.selectedBlues
-        isNewCanoe = checkNewCanoe possibleCanoes (if model.turn == 1 then selectedReds else selectedBlues)
       in
-        ( { model | debugString = Debug.toString isNewCanoe, selectedReds = selectedReds, selectedBlues = selectedBlues, turn = newTurn, board = newBoard}, 
+        ( { model | turn = newTurn}, 
           outputPort
             ( Json.Encode.encode
               0
@@ -237,62 +293,31 @@ update msg model =
           )
         )
 
-checkNewCanoe : List ( List ( Int, Int )) -> Set ( Int, Int ) -> Bool
-checkNewCanoe possibleCanoes pegs =
-  case possibleCanoes of
-    c::cs ->
-      let
-        cset = Set.fromList c
-      in
-        if Set.size (Set.intersect cset pegs) == 4 then
-          True
-        else
-          checkNewCanoe cs pegs
-    _ ->
-      False
+    AddToastMessage subMsg ->
+        Toast.update toastConfig AddToastMessage subMsg model
 
-getCanoes : List ( List ( List ( List (Int, Int)))) -> Int -> Int -> Int -> List ( List (Int, Int) )
-getCanoes board row tx ty =
-  case board of
-    r::rs ->
-      case getCanoesHelper r 0 row tx ty of
-        Just c ->
-          c
-        Nothing -> 
-          (getCanoes rs (row+1) tx ty)
-    _ ->
-      [[]]
+    TestToast str ->
+        ( model, Cmd.none )
+            |> addToast (Toast.Success "Allright!" "Thing successfully updated")
 
-getCanoesHelper : List ( List ( List (Int, Int))) -> Int -> Int-> Int -> Int -> Maybe (List ( List (Int, Int)))
-getCanoesHelper row ix iy tx ty =
-  case row of
-    c::cs ->
-      if (ix, iy) == (tx, ty) then
-        Just c
-      else
-        getCanoesHelper cs (ix+1) iy tx ty
-    _ ->
-      Nothing
+    ToggleHelp ->
+        ( { model | showHelp = not model.showHelp }, Cmd.none )
 
-updateRows : Int -> Int -> Int -> Int -> List ( List (Int )) -> List ( List (Int) )
-updateRows iy tx ty value board =
-  case board of
-    r::rs ->
-      updateCol 0 iy tx ty value r::updateRows (iy+1) tx ty value rs
-    _ ->
-      []
 
-      
-updateCol : Int -> Int -> Int -> Int -> Int -> List (Int ) -> List (Int)
-updateCol ix iy tx ty value board =
-  case board of
-    c::cs ->
-      if (ix, iy) == (tx, ty) then
-        value :: cs
-      else
-        c :: updateCol (ix+1) iy tx ty value cs
-    _ ->
-      []
+
+toastConfig : Toast.Config Msg
+toastConfig =
+    Toast.defaultConfig |> Toast.delay 3300
+
+
+-- addToast : Toast.Toast -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+-- addToast toast ( model, cmd ) =
+--     Toast.addToast toastConfig AddToastMessage toast ( model, cmd )
+
+    
+addToast : Toast.Toast -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
+addToast toast ( model, cmd ) =
+    Toast.addToast toastConfig AddToastMessage toast ( model, cmd )
 
 decodeJSON : Json.Decode.Decoder JSONMessage
 decodeJSON =
@@ -301,6 +326,11 @@ decodeJSON =
     (Json.Decode.field "action" Json.Decode.string)
     (Json.Decode.field "content" Json.Decode.value)
     
+decodeMoveTuple : Json.Decode.Decoder (Int, Int)
+decodeMoveTuple =
+  Json.Decode.map2 Tuple.pair
+    (Json.Decode.index 0 Json.Decode.int)
+    (Json.Decode.index 1 Json.Decode.int)
 
 decodeTeams : Json.Decode.Decoder ( String, String )
 decodeTeams =
@@ -325,8 +355,8 @@ subscriptions _ =
 
 
 -- VIEW
-drawCells : Int -> Int -> List (Int) -> List (Html Msg)
-drawCells x y remainingCells =
+drawCells : Int -> Int -> List (Int) -> (Int, Int) -> List (Html Msg)
+drawCells x y remainingCells lastMove =
   case remainingCells of
     [] ->
       []
@@ -334,26 +364,35 @@ drawCells x y remainingCells =
       case v of
         0 ->
           div [class "c"]
-          [ div [ class "s", onClick (AddMove x y) ] [] ] :: drawCells (x+1) y vs
+          [ div [ class "s", onClick (AddMove x y) ] [] ] :: drawCells (x+1) y vs lastMove
         1 ->
           div [class "c"]
-          [ div [ class "s red" ] [] ] :: drawCells (x+1) y vs
+          [ div [ class ("s red" ++ if (x, y) == lastMove then " pulse" else "") ] [] ] :: drawCells (x+1) y vs lastMove
         2 ->
           div [class "c"]
-          [ div [ class "s blue" ] [] ] :: drawCells (x+1) y vs
+          [ div [ class ("s blue" ++ if (x, y) == lastMove then " pulse" else "") ] [] ] :: drawCells (x+1) y vs lastMove
         _ ->
-          div [class "c"] [] :: drawCells (x+1) y vs
+          div [class "c"] [] :: drawCells (x+1) y vs lastMove
 
-drawRows : Int -> List ( List (Int)) -> List (Html Msg)
-drawRows y remainingRows =
+drawRows : Int -> List ( List (Int)) -> (Int, Int) -> List (Html Msg)
+drawRows y remainingRows lastMove =
   case remainingRows of
     [] ->
       []
     r::rs ->
-      List.append (drawCells 0 y r) (drawRows (y+1) rs)
+      List.append (drawCells 0 y r lastMove) (drawRows (y+1) rs lastMove)
 
-formatName : Maybe User -> String -> List ( Html Msg )
-formatName user color =
+isSameUser : Maybe User -> Maybe User -> Bool
+isSameUser u1 u2 =
+  case u1 of
+     Nothing -> False
+     Just a ->
+      case u2 of
+        Nothing -> False
+        Just b -> a.username == b.username
+
+formatName : Maybe User -> String -> Bool -> List ( Html Msg )
+formatName user color isUser =
   case user of
      Nothing ->
       [ div [ class ("s " ++ color) ] []
@@ -364,7 +403,7 @@ formatName user color =
       ]
      Just u  ->
       [ div [ class ("s " ++ color) ] []
-        , span []
+        , span [ class (if isUser then "bold" else "") ]
           [ text u.nickname
           , em [] [ text (String.fromInt u.score) ]
           ]
@@ -381,6 +420,7 @@ modalUser user color teamid =
      Just u -> div [ class ("inactive modal_" ++ String.toLower color), onClick (SetTeam 0) ] [ div [ class "pad" ] [ h3 [] [ text (color ++ " player") ], h4 [] [ text u.nickname ] ] ]
 
 
+showModal : Maybe User -> Maybe User -> List (User) -> Html Msg
 showModal red blue users = 
   div [ class "lightbox" ]
   [ div [ class "modal"]
@@ -391,31 +431,45 @@ showModal red blue users =
       ]
     ]
   ]
+  
+showHelp : Html Msg
+showHelp = 
+  div [ class "lightbox" ]
+  [ div [ class "modal"]
+    [ div [ class "flex_container" ] [ text "HELP YA" ]
+    , div [] [ button [ class "close", onClick ToggleHelp ] [ text "Close" ] ]
+    ]
+  ]
 
 
 view : Model -> Html Msg
 view model =
   let
-    drawBoard board = drawRows 0 board
+    drawBoard board lastMove = drawRows 0 board lastMove
   in 
     div [ class "container"]
     [ main_ []
-      [ div [ class "top_message" ] [ text model.topMessage ]
-      , div [] [ text model.debugString ]
+      [ div [ class "top" ]
+        [ div [ class "top_message" ] [ text model.topMessage ]
+        -- , div [ class (if model.debugString == "" then "" else "flash_message")] [ text model.debugString ]
+        , div [ class "toast_container"] [ Toast.view toastConfig Toast.defaultView AddToastMessage model.toastMessages ]
+        ]
       , div [ class "grid" ]
-        ( model.board |> drawBoard )
+        ( drawBoard model.board model.lastMove )
       , div [ class "requests" ]
         [ div [ class "player-colors" ]
           [ div [ class "player-colors__row" ]
-            (formatName model.red "red")
+            (formatName model.red "red" (isSameUser model.user model.red))
           , div [ class "player-colors__row" ]
-            (formatName model.blue "blue")
+            (formatName model.blue "blue" (isSameUser model.user model.blue))
           ]
-        , div [class "a"]
-          [ text "Resign" ]
-        , div [class "a"]
-          [ text "Help" ]
+        , div [class "game_buttons"]
+          [ if model.gameOver then text "" else button [ onClick SendResign ] [ text "Resign" ]
+          , button [ onClick SendNewGame ] [ text "New Game" ] ]
+        , div [class "help_buttons"]
+          [ button [ id "help", onClick ToggleHelp ] [ text "Help" ] ]
         ]
       ]
-    , (if (model.red == Nothing || model.blue == Nothing) then showModal model.red model.blue model.users else div [] [])
+    , if model.red == Nothing || model.blue == Nothing then showModal model.red model.blue model.users else div [] []
+    , if model.showHelp then showHelp else div [] []
     ]
