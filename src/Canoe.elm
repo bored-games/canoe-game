@@ -15,6 +15,7 @@ import Time
 import Json.Encode
 import Json.Decode
 
+import Chat exposing (Chatline)
 import User exposing (User)
 
 
@@ -40,7 +41,16 @@ type alias JSONMessage =
   }
 
 type alias Model =
-  { nameInProgress : String
+  { room_name : String
+  , nameInProgress : String
+  , colorInProgress : String
+  , messageInProgress : String
+  , chat : List Chatline
+  , toggleStates :
+    { settings: String
+    , pollOptions: String
+    , emoticons: String
+    }
   , topMessage : String
   , toastMessages :  Toast.Stack Toast.Toast
   , board : List ( List (Int) )
@@ -73,6 +83,13 @@ init _ =
   (Model
     ""
     ""
+    ""
+    ""
+    [ ]
+    { settings = "none",
+      pollOptions = "none",
+      emoticons = "none" }   
+    ""
     Toast.initialState
     buildDefault
     (4, 4)
@@ -98,7 +115,14 @@ init _ =
 
 type Msg
   = SetName String
-  | NewGame
+  | SetColor String
+  | UpdateSettings
+  | SetMessage String
+  | SendMessage
+  | TogglePollOptions
+  | ToggleSettings
+  | ToggleEmoticons
+  | InsertEmoticon String
   | Tick Time.Posix
   | Ping Time.Posix
   | GetJSON Json.Encode.Value              -- Parse incoming JSON
@@ -108,10 +132,12 @@ type Msg
   | GetMessage Json.Encode.Value
   | GetFlashMessage Json.Encode.Value
   | GetLastMove Json.Encode.Value
+  | NewGame Json.Encode.Value
   | GameOver Json.Encode.Value
+  | GetChat Json.Encode.Value
+  | ConnectToServer Json.Encode.Value
   | SendNewGame
   | SendResign
-  | ConnectToServer Json.Encode.Value
   | SetTeam Int
   | AddMove Int Int
   | AddToastMessage (Toast.Msg Toast.Toast)
@@ -125,9 +151,99 @@ update msg model =
     SetName name ->
       ( { model | nameInProgress = name }, Cmd.none )
       
-    NewGame -> -- TODO!
-      ( { model | gameOver = False }, Cmd.none )
+    SetColor color ->
+      ( { model | colorInProgress = color }, Cmd.none )
       
+    UpdateSettings ->
+      let
+        oldUser =
+          case model.user of
+            Nothing -> User "" "" "" 0 0 False False
+            Just u -> u
+
+        oldUsers = model.users
+        oldName = oldUser.nickname
+        oldToggleStates = model.toggleStates
+        newColor = model.colorInProgress
+        newName = if List.member model.nameInProgress (List.map .nickname oldUsers) then
+                    oldName
+                  else
+                    if String.length model.nameInProgress > 0 then model.nameInProgress else oldName
+        newUser = { oldUser | nickname = newName, color = newColor }
+        replaceUser testUser =
+          if oldUser.nickname == testUser.nickname then
+            { testUser | nickname = newName, color = newColor }
+          else
+            testUser
+        newUsers = List.map replaceUser oldUsers
+        newToggleStates = { oldToggleStates | settings = "none" }
+      in
+      ( { model
+       | user = Just newUser
+       , users = newUsers
+       , nameInProgress = ""
+       , toggleStates = newToggleStates
+      }
+      , outputPort (Json.Encode.encode 0 (Json.Encode.object [ ("action", Json.Encode.string "update_user"), ("content", User.encodeUser newUser) ] ) ) )
+
+    SetMessage message ->
+      ( { model | messageInProgress = message }
+      , Cmd.none
+      )
+      
+    SendMessage ->
+      let
+        newmsg = String.trim model.messageInProgress
+      in
+        if newmsg == "" then
+          ( { model | messageInProgress = "" }, Cmd.none )
+        else
+          ( { model | messageInProgress = "" }
+          , outputPort (Json.Encode.encode
+                          0
+                        ( Json.Encode.object
+                        [ ( "action", Json.Encode.string "update_chat"),
+                          ( "content", Chat.encodeChatline model.room_name (Maybe.withDefault (User "" "" "" 0 0 False False) model.user) newmsg 0 ) ] ) ) )
+
+    TogglePollOptions ->
+      let
+        oldToggleStates = model.toggleStates
+        newToggleStates =
+          { oldToggleStates
+          | pollOptions = if oldToggleStates.pollOptions == "none" then "flex" else "none"
+          , settings = "none"
+          , emoticons = "none" }
+      in
+        ( { model | toggleStates = newToggleStates }
+        , Cmd.none
+        )
+      
+
+    ToggleSettings ->
+      let
+        oldToggleStates = model.toggleStates
+        newToggleStates =
+          { oldToggleStates
+            | settings = if oldToggleStates.settings == "none" then "flex" else "none"
+            , pollOptions = "none"
+            , emoticons = "none" }
+      in
+        ( { model | toggleStates = newToggleStates }, Cmd.none )
+      
+    ToggleEmoticons ->
+      let
+        oldToggleStates = model.toggleStates
+        newToggleStates =
+          { oldToggleStates
+          | emoticons = if oldToggleStates.emoticons == "none" then "flex" else "none"
+          , pollOptions = "none"
+          , settings = "none" }
+      in
+        ( { model | toggleStates = newToggleStates }, Cmd.none )
+    
+    InsertEmoticon str ->
+      ( { model | messageInProgress = model.messageInProgress ++ " :" ++ str ++ ": " }, Cmd.none )
+
 
     Tick newTime ->
       let
@@ -148,8 +264,6 @@ update msg model =
       case Json.Decode.decodeValue decodeJSON json of
         Ok {action, content} ->
           case action of
-            "update_chat" ->
-              ((Debug.log "Error: not implemented" model), Cmd.none ) -- Error: missing code
             "update_scoreboard" ->
               update (GetUsersList content) model
             "update_user" ->
@@ -164,6 +278,16 @@ update msg model =
               update (GetLastMove content) model
             "game_over" ->
               update (GameOver content) model
+            "new_game" ->
+              update (NewGame content) model
+            "update_chat" ->
+              update (GetChat content) model
+            "player_chat_new_message" ->
+              update (GetChat content) model
+            "system_chat_new_message" ->
+              update (GetChat content) model
+            "system_chat_to_player_new_message" ->
+              update (GetChat content) model
             _ ->
               ((Debug.log "Error: unknown code in JSON message" model), Cmd.none ) -- Error: missing code
 
@@ -222,13 +346,27 @@ update msg model =
           ( { model | lastMove = tuple}, Cmd.none )
         Err _ ->
           ( { model | debugString = "Error parsing Flash Message JSON"}, Cmd.none )
+          
+    NewGame json ->
+      case Json.Decode.decodeValue Json.Decode.string json of
+        Ok message ->
+          ( { model | gameOver = False, topMessage = message }, Cmd.none )
+        Err _ ->
+          ( { model | debugString = "Error parsing game_over JSON"}, Cmd.none )
 
     GameOver json ->
       case Json.Decode.decodeValue Json.Decode.string json of
         Ok message ->
           ( { model | gameOver = True, topMessage = message }, Cmd.none )
         Err _ ->
-          ( { model | debugString = "Error parsing user JSON"}, Cmd.none )
+          ( { model | debugString = "Error parsing game_over JSON"}, Cmd.none )
+
+    GetChat json ->
+      case Json.Decode.decodeValue Chat.decodeChatline json of
+        Ok chatline ->
+          ( { model | chat = chatline::model.chat}, Cmd.none )
+        Err _ ->
+          ( { model | debugString = "Error parsing chat JSON"}, Cmd.none )
 
     ConnectToServer _ ->
       ( model,
@@ -382,6 +520,112 @@ drawRows y remainingRows lastMove =
     r::rs ->
       List.append (drawCells 0 y r lastMove) (drawRows (y+1) rs lastMove)
 
+      
+drawEmoticon : String -> Html Msg
+drawEmoticon str =
+  div [ class ("emoticon emoticon--" ++ str), onClick (InsertEmoticon str) ] []
+
+emoticonList : List (String)
+emoticonList = [ "cool", "crazy", "damn", "geek", "grin", "huh", "lol", "love", "omg", "pout", "sad", "smile", "stars", "ugh", "waiting", "whoopsy", "wink", "wtf" ]
+
+drawEmoticons : List (Html Msg)
+drawEmoticons =
+  List.map drawEmoticon emoticonList
+
+drawMessage : Chatline -> Html Msg
+drawMessage message =
+  case message.kind of
+    2 -> (div [ class "chat__line" ] [ object [ class "chat__line--svg", attribute "data" message.message ] [ ] ])
+    _ -> case message.user of
+           Just user -> -- regular chat message
+             ( div [ class "chat__line" ] 
+               ( div [ class "chat__username", style "color" user.color ]
+                 [ text user.nickname ] :: parseEmoticonHtml message.message )
+             )
+           _ -> -- system message
+             (div [ class "chat__line" ] [ em [ class "chat__line--system" ] [ text message.message ] ])
+
+drawSettings : Model -> List (Html Msg)
+drawSettings model =
+  [ h2 [ ] [ text "Settings" ]
+  , div [ class "settings__flexbox" ]
+  [ div [ class "setting__input" ] [ input [ type_ "text", onInput SetName, placeholder "New name", value model.nameInProgress ] [] ]
+  , div [ class "setting__input" ]
+    [ select [ onInput SetColor ]
+      [ option [ value "", style "color" "#707070" ] [ text "Change color" ]
+      , option [ value "#e05e5e", style "color" "#e05e5e" ] [ text "red" ]
+      , option [ value "#e09f5e", style "color" "#e09f5e" ] [ text "orange" ]
+      , option [ value "#e0e05e", style "color" "#e0e05e" ] [ text "yellow" ]
+      , option [ value "#9fe05e", style "color" "#9fe05e" ] [ text "lime" ]
+      , option [ value "#5ee05e", style "color" "#5ee05e" ] [ text "dark sea" ]
+      , option [ value "#5ee09f", style "color" "#5ee09f" ] [ text "aquamarine" ]
+      , option [ value "#5ee0e0", style "color" "#5ee0e0" ] [ text "azure" ]
+      , option [ value "#5e9fe0", style "color" "#5e9fe0" ] [ text "cornflower" ]
+      , option [ value "#5e5ee0", style "color" "#5e5ee0" ] [ text "periwinkle" ]
+      , option [ value "#9f5ee0", style "color" "#9f5ee0" ] [ text "dendrobium " ]
+      , option [ value "#e05ee0", style "color" "#e05ee0" ] [ text "french rose" ]
+      , option [ value "#e05e9f", style "color" "#e05e9f" ] [ text "barbie-mobile" ]
+      , option [ value "#b19278", style "color" "#b19278" ] [ text "english elm" ]
+      , option [ value "#e0e0e0", style "color" "#e0e0e0" ] [ text "gainsboro" ]
+      ]
+    ]
+  , div [ class "setting__submit" ] [ input [ type_ "submit", class "submit", value "Update", onClick UpdateSettings ] [] ]
+    ]
+  ]
+             
+drawPollOptions : List (Html Msg)
+drawPollOptions =
+  [ h2 [ ] [ text "Poll Commands" ]
+  , div [ class "poll__info" ] [ text "Use /poll <command> or /set <command> to change settings. UIDs can be found by hovering over usernames in the scoreboard." ]
+  , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Give 'owner' status to user. Owners can use '/set'." ] [ text "owner ", span [ class "red" ] [ text "UID" ] ]
+  , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Remove 'owner' status from user." ] [ text "demote ", span [ class "red" ] [ text "UID" ] ]
+  , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Mute user. Muted users cannot chat or create polls." ] [ text "mute ", span [ class "red" ] [ text "UID" ] ]
+  , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Unmute user." ] [ text "unmute ", span [ class "red" ] [ text "UID" ] ]
+  , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Kick user from the game." ] [ text "kick ", span [ class "red" ] [ text "UID" ] ]
+  , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Set score of user to some number." ] [ text "score ", span [ class "red" ] [ text "UID " ], span [ class "blue" ] [ text "int" ] ]
+  , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Reset all scores to 0." ] [ text "reset_scores" ]
+  , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Reset board walls, goals, and robot positions." ] [ text "reset" ]
+  , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Reset goal position." ] [ text "new" ]
+  , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Set time limit for polls in seconds. Must be at least 30." ] [ text "poll_time ", span [ class "blue" ] [ text "int" ] ]
+  , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Set time limit for finding new solutions. Must be at least 0."] [ text "countdown_time ", span [ class "blue" ] [ text "int" ] ]
+  , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Set number of puzzles before a new board is shuffled." ] [ text "puzzles_before_new_board ", span [ class "blue" ] [ text "int" ] ]
+  , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "1-robot solutions below this number will not add to score." ] [ text "min_moves ", span [ class "blue" ] [ text "int" ] ]
+  ]
+
+parseEmoticonHtml : String -> List (Html Msg)
+parseEmoticonHtml str =
+  let
+    parseEmoticon ind1 ind2 teststr =
+      let
+        parsedStr = String.slice (ind1+1) ind2 teststr
+      in
+        if List.member parsedStr emoticonList then
+          span [ class ("emoticon emoticon--" ++ parsedStr) ] [] :: parseEmoticonHtml (String.dropLeft (ind2+1) str)
+        else
+          text (":"++parsedStr) :: parseEmoticonHtml (String.dropLeft ind2 str)
+  in
+    case String.indexes ":" str of
+      a::b::_ ->
+        text (String.slice 0 a str)
+        :: parseEmoticon a b str
+
+      _ ->
+        [ text str ]
+
+onEnter : msg -> Attribute msg
+onEnter msg =
+  let
+    filterKey code =
+      if code == 13 then -- Enter was pressed
+        Json.Decode.succeed { message = msg, stopPropagation = False, preventDefault = True }
+      else
+        Json.Decode.fail "ignored input"
+    decoder =
+      Html.Events.keyCode |> Json.Decode.andThen filterKey
+  
+  in 
+    Html.Events.custom "keydown" decoder
+
 isSameUser : Maybe User -> Maybe User -> Bool
 isSameUser u1 u2 =
   case u1 of
@@ -403,7 +647,7 @@ formatName user color isUser =
       ]
      Just u  ->
       [ div [ class ("s " ++ color) ] []
-        , span [ class (if isUser then "bold" else "") ]
+        , span (if isUser then [class "bold", attribute "flow" "up", attribute "tooltip" "This is you!"] else [])
           [ text u.nickname
           , em [] [ text (String.fromInt u.score) ]
           ]
@@ -411,7 +655,10 @@ formatName user color isUser =
 
 modalSpectators : Maybe User -> Maybe User -> List ( User )-> String
 modalSpectators red_user blue_user all_users =
-  String.join ", " (List.map .nickname all_users)
+  let
+    spectators = List.filter (\x -> not (isSameUser (Just x) red_user) && not (isSameUser (Just x) blue_user)) all_users
+  in
+    String.join ", " (List.map .nickname spectators)
 
 modalUser : Maybe User -> String -> Int -> Html Msg
 modalUser user color teamid =
@@ -436,8 +683,13 @@ showHelp : Html Msg
 showHelp = 
   div [ class "lightbox" ]
   [ div [ class "modal"]
-    [ div [ class "flex_container" ] [ text "HELP YA" ]
-    , div [] [ button [ class "close", onClick ToggleHelp ] [ text "Close" ] ]
+    [ div [ class "flex_container" ]
+      [ h2 [] [ text "Instructions" ]
+      , p [] [ text "Players take turns placing \"tokens\" trying to complete four-token \"canoes\". A complete, valid canoe is as follows:" ]
+      , div [ class "help--canoes" ] [ ]
+      , p [] [ text "The first player to complete two separate canoes (sharing no tokens) wins!" ]
+      ]
+    , div [ class "margin-left" ] [ button [ class "close", onClick ToggleHelp ] [ text "Close" ] ]
     ]
   ]
 
@@ -445,6 +697,9 @@ showHelp =
 view : Model -> Html Msg
 view model =
   let
+    drawChat chat =
+      List.map drawMessage chat
+
     drawBoard board lastMove = drawRows 0 board lastMove
   in 
     div [ class "container"]
@@ -470,6 +725,24 @@ view model =
           [ button [ id "help", onClick ToggleHelp ] [ text "Help" ] ]
         ]
       ]
-    , if model.red == Nothing || model.blue == Nothing then showModal model.red model.blue model.users else div [] []
-    , if model.showHelp then showHelp else div [] []
+    , aside [ class "sidebar", attribute "data-role" "sidebar" ]
+      [ h2 [] [ text "Chat" ]
+      , div [class "chat", id "chat"] (List.reverse model.chat |> drawChat)
+      , div [ class ("sidebar__settings " ++ ("module-" ++ model.toggleStates.settings)) ] (drawSettings model)
+      , div [ class ("sidebar__polloptions " ++ ("module-" ++ model.toggleStates.pollOptions)) ] drawPollOptions
+      , div [ class "message"]
+        [ textarea [ class "message__box", onEnter SendMessage, onInput SetMessage, placeholder "Send a message", value model.messageInProgress, Html.Attributes.maxlength 255 ] []
+        , div [ class ("sidebar__emoticons " ++ ("module-" ++ model.toggleStates.emoticons)) ] drawEmoticons
+        , div [ class "message__actions" ]
+          [
+          button [ class "settings", onClick ToggleSettings ] []
+        , button [ class "poll", onClick TogglePollOptions ] []
+        , div [ class "flex-spacer" ] []
+        , button [ class "emoticons", onClick ToggleEmoticons ] []
+        , input [ type_ "submit", class "submit", value "Send", onClick SendMessage ] []
+          ]
+        ]
+      ]
+    , if model.red == Nothing || model.blue == Nothing then showModal model.red model.blue model.users else text ""
+    , if model.showHelp then showHelp else text ""
     ]

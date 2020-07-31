@@ -1,10 +1,15 @@
 body {
-  background: #d4dee9;
+  background: #1e1e20;
   padding: 0;
   margin: 0;
   text-align: left;
-  font-family: "Segoe UI";
   height: 100vh;
+  color: #d1d4d8;
+  word-wrap: break-word;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  font-size: 14px;
+  line-height: 1.5;
+
 }
 
 .container {
@@ -21,25 +26,16 @@ main {
   overflow-x: hidden;
 }
 
-sidebar {
-  flex: 1 1 30%;
-  background: #fff;
-  border-left: 1px solid #b5bdc7;
-  max-width: 375px;
-  padding: 1.0rem;
-  box-shadow: -5px 0 5px rgba(0, 0, 0, .03);
-}
-
 .top {
-  position: relative;  
+  position: relative;
   width: 100%;
 }
 
 .top_message {
-  padding: 2.5rem 0 0;  
+  padding: 2.5rem 0 0;
   font-size: 42px;
   font-weight: 200;
-  color: #565a5e;
+  color: #8c9297;
   text-align: center;
 }
 
@@ -81,14 +77,17 @@ sidebar {
     font-size: 40px;
     opacity: 0.0;
   }
+
   20% {
     font-size: 50px;
     opacity: 0.6;
   }
+
   80% {
     font-size: 50px;
     opacity: 0.6;
   }
+
   100% {
     font-size: 50px;
     opacity: 0;
@@ -119,7 +118,12 @@ sidebar {
 }
 
 @keyframes bounceInRight {
-  from, 60%, 75%, 90%, to {
+
+  from,
+  60%,
+  75%,
+  90%,
+  to {
     animation-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
   }
 
@@ -176,14 +180,14 @@ sidebar {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
 }
 
-.requests > div {
+.requests>div {
   flex: 0 0 auto;
   font-size: 1.3rem;
-  color: rgba(0, 0, 0, .6);
-  padding: 1.0rem 1.5rem;;
+  padding: 1.0rem 1.5rem;
+  ;
 }
 
 .game_buttons {
@@ -236,7 +240,7 @@ button:focus {
 
 button#help {
   background: transparent;
-  background-image: url('../static/help.svg');
+  background-image: url('../static/images/icons/help.svg');
   font-size: 0;
   height: 2.25rem;
   width: 2.25rem;
@@ -269,13 +273,20 @@ button#help:hover {
 .player-colors__row span {
   margin-left: 0.75rem;
   font-size: 1.3rem;
-  color: rgba(0, 0, 0, .6);
+  font-weight: 300;
+  color: rgba(255, 255, 255, .6);
+}
+
+
+.player-colors__row span.bold {
+  font-weight: 600;
 }
 
 .player-colors__row span em {
-  color: rgba(0, 0, 100, .3);
+  color: rgba(200, 200, 200, .5);
   font-style: normal;
   margin-left: .35rem;
+  font-weight: 300;
 }
 
 .grid {
@@ -305,7 +316,7 @@ button#help:hover {
 .s {
   height: 1.5vw;
   width: 1.5vw;
-  border: 2px solid rgba(0, 0, 0, .2);
+  border: 2px solid rgba(255, 255, 255, .2);
   background: rgba(255, 255, 255, .1);
   border-radius: 100px;
   transition: .15s linear all;
@@ -313,25 +324,21 @@ button#help:hover {
 }
 
 .s:hover {
-  border: 2px solid rgba(0, 0, 0, .6);
-  background: #fff;
+  border: 2px solid rgba(255, 255, 255, .6);
+  background: #878889;
   box-shadow: 0 0 4px rgba(0, 30, 100, 0.2);
 }
 
 .red {
-  border-color: rgba(176, 64, 76, 1) !important;
-  background: rgba(176, 64, 76, .3) !important;
+  border-color: rgba(211, 64, 76, 1) !important;
+  background: rgba(211, 64, 76, .5) !important;
   cursor: default;
 }
 
 .blue {
-  border-color: rgba(64, 76, 176, 1) !important;
-  background: rgba(64, 76, 176, .3) !important;
+  border-color: rgba(33, 116, 211, 1) !important;
+  background: rgba(33, 116, 211, .5) !important;
   cursor: default;
-}
-
-.bold {
-  font-weight: 600;
 }
 
 .pulse {
@@ -340,29 +347,32 @@ button#help:hover {
 
 @keyframes shadow-pulse {
   0% {
-        box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 0 0 0px rgba(255, 255, 255, 0.18);
   }
+
   100% {
-        box-shadow: 0 0 3px 15px rgba(0, 0, 0, 0);
+    box-shadow: 0 0 2px 15px rgba(255, 255, 255, 0);
   }
 }
 
 .lightbox {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   position: absolute;
   width: 100%;
   height: 100%;
+  z-index: 65534;
 }
 
 .modal {
-  background: #e5e5e5;
+  background: #1a1c1f;
+  border: 1px solid #323539;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   padding: 1.0rem 1.0rem 1.5rem 1.0rem;
   border-radius: 8px;
-  box-shadow: 0 0 15px 8px rgba(0, 0, 0, .2);
+  box-shadow: 0 0 15px 8px rgba(0, 0, 0, .4);
   max-width: 60%;
   min-width: 30%;
 }
@@ -370,6 +380,11 @@ button#help:hover {
 .flex_container {
   display: flex;
   flex-wrap: wrap;
+  padding: 0.25rem 0.25rem 1.5rem 0.25rem;
+}
+
+.flex_container h2 {
+  flex: 1 1 100%;  
 }
 
 .flex_container h3 {
@@ -389,21 +404,21 @@ button#help:hover {
 .modal_red {
   font-size: 26px;
   font-weight: 200;
-  flex: 0 0 50%; 
-  color: rgba(176, 64, 76, 1);
+  flex: 0 0 50%;
+  color: rgba(206, 94, 106, 1);
   text-align: center;
   cursor: pointer;
   transition: .25s linear transform;
 }
 
 .modal_red h3 {
-  color: rgba(176, 64, 76, .8) !important;
+  color: rgba(206, 94, 106, .8) !important;
   text-align: center;
 }
 
 .modal_blue {
   flex: 0 0 50%;
-  color: rgba(64, 76, 176, 1);
+  color: rgba(94, 106, 206, 1);
   text-align: center;
   cursor: pointer;
   transition: .15s linear transform;
@@ -430,16 +445,33 @@ button#help:hover {
 }
 
 .modal_blue h3 {
-  color: rgba(64, 76, 176, 0.8) !important;
+  color: rgba(94, 106, 206, 0.8) !important;
   text-align: center;
 }
 
 .modal_spectators {
   padding-top: 1.5rem;
   flex: 1 1 100%;
-  color: #5a5b5c;
+  color: #7a7b7c;
 }
 
 .modal_spectators h3 {
   text-align: center;
+}
+
+.modal p {
+  flex: 1 1 100%;
+}
+
+.help--canoes {
+  flex: 1 1 auto;
+  display: block;
+  height: 250px;
+  max-width: 702px;
+  border-radius: 8px;
+  background-image: url('../static/images/canoes-help.png');
+  background-repeat: no-repeat;
+  border: 1px solid #2a2b2c;
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, .2);
+  margin: 1.0rem 0;
 }

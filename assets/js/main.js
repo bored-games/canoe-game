@@ -5227,24 +5227,34 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $author$project$Canoe$Model = function (nameInProgress) {
-	return function (topMessage) {
-		return function (toastMessages) {
-			return function (board) {
-				return function (lastMove) {
-					return function (selectedReds) {
-						return function (selectedBlues) {
-							return function (lastCell) {
-								return function (turn) {
-									return function (currentTimer) {
-										return function (debugString) {
-											return function (red) {
-												return function (blue) {
-													return function (user) {
-														return function (users) {
-															return function (gameOver) {
-																return function (showHelp) {
-																	return {blue: blue, board: board, currentTimer: currentTimer, debugString: debugString, gameOver: gameOver, lastCell: lastCell, lastMove: lastMove, nameInProgress: nameInProgress, red: red, selectedBlues: selectedBlues, selectedReds: selectedReds, showHelp: showHelp, toastMessages: toastMessages, topMessage: topMessage, turn: turn, user: user, users: users};
+var $author$project$Canoe$Model = function (room_name) {
+	return function (nameInProgress) {
+		return function (colorInProgress) {
+			return function (messageInProgress) {
+				return function (chat) {
+					return function (toggleStates) {
+						return function (topMessage) {
+							return function (toastMessages) {
+								return function (board) {
+									return function (lastMove) {
+										return function (selectedReds) {
+											return function (selectedBlues) {
+												return function (lastCell) {
+													return function (turn) {
+														return function (currentTimer) {
+															return function (debugString) {
+																return function (red) {
+																	return function (blue) {
+																		return function (user) {
+																			return function (users) {
+																				return function (gameOver) {
+																					return function (showHelp) {
+																						return {blue: blue, board: board, chat: chat, colorInProgress: colorInProgress, currentTimer: currentTimer, debugString: debugString, gameOver: gameOver, lastCell: lastCell, lastMove: lastMove, messageInProgress: messageInProgress, nameInProgress: nameInProgress, red: red, room_name: room_name, selectedBlues: selectedBlues, selectedReds: selectedReds, showHelp: showHelp, toastMessages: toastMessages, toggleStates: toggleStates, topMessage: topMessage, turn: turn, user: user, users: users};
+																					};
+																				};
+																			};
+																		};
+																	};
 																};
 															};
 														};
@@ -5317,7 +5327,8 @@ var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Canoe$init = function (_v0) {
 	return _Utils_Tuple2(
-		$author$project$Canoe$Model('')('')($author$project$Toast$initialState)($author$project$Canoe$buildDefault)(
+		$author$project$Canoe$Model('')('')('')('')(_List_Nil)(
+			{emoticons: 'none', pollOptions: 'none', settings: 'none'})('')($author$project$Toast$initialState)($author$project$Canoe$buildDefault)(
 			_Utils_Tuple2(4, 4))($elm$core$Set$empty)($elm$core$Set$empty)(3)(1)(0)(' ')($elm$core$Maybe$Nothing)($elm$core$Maybe$Nothing)($elm$core$Maybe$Nothing)(_List_Nil)(false)(false),
 		$elm$core$Platform$Cmd$none);
 };
@@ -5764,6 +5775,9 @@ var $author$project$Canoe$GameOver = function (a) {
 var $author$project$Canoe$GetBoard = function (a) {
 	return {$: 'GetBoard', a: a};
 };
+var $author$project$Canoe$GetChat = function (a) {
+	return {$: 'GetChat', a: a};
+};
 var $author$project$Canoe$GetFlashMessage = function (a) {
 	return {$: 'GetFlashMessage', a: a};
 };
@@ -5779,9 +5793,16 @@ var $author$project$Canoe$GetUser = function (a) {
 var $author$project$Canoe$GetUsersList = function (a) {
 	return {$: 'GetUsersList', a: a};
 };
+var $author$project$Canoe$NewGame = function (a) {
+	return {$: 'NewGame', a: a};
+};
 var $author$project$Toast$Success = F2(
 	function (a, b) {
 		return {$: 'Success', a: a, b: b};
+	});
+var $author$project$User$User = F7(
+	function (username, nickname, color, team, score, is_admin, is_muted) {
+		return {color: color, is_admin: is_admin, is_muted: is_muted, nickname: nickname, score: score, team: team, username: username};
 	});
 var $author$project$Toast$Temporary = {$: 'Temporary'};
 var $author$project$Toast$Entered = {$: 'Entered'};
@@ -6006,34 +6027,19 @@ var $author$project$Canoe$addToast = F2(
 			toast,
 			_Utils_Tuple2(model, cmd));
 	});
-var $author$project$Canoe$JSONMessage = F2(
-	function (action, content) {
-		return {action: action, content: content};
+var $author$project$Chat$Chatline = F5(
+	function (room_name, user, message, timestamp, kind) {
+		return {kind: kind, message: message, room_name: room_name, timestamp: timestamp, user: user};
 	});
-var $elm$json$Json$Decode$field = _Json_decodeField;
-var $elm$json$Json$Decode$string = _Json_decodeString;
-var $author$project$Canoe$decodeJSON = A3(
-	$elm$json$Json$Decode$map2,
-	$author$project$Canoe$JSONMessage,
-	A2($elm$json$Json$Decode$field, 'action', $elm$json$Json$Decode$string),
-	A2($elm$json$Json$Decode$field, 'content', $elm$json$Json$Decode$value));
-var $elm$json$Json$Decode$index = _Json_decodeIndex;
-var $elm$json$Json$Decode$int = _Json_decodeInt;
-var $elm$core$Tuple$pair = F2(
-	function (a, b) {
-		return _Utils_Tuple2(a, b);
-	});
-var $author$project$Canoe$decodeMoveTuple = A3(
-	$elm$json$Json$Decode$map2,
-	$elm$core$Tuple$pair,
-	A2($elm$json$Json$Decode$index, 0, $elm$json$Json$Decode$int),
-	A2($elm$json$Json$Decode$index, 1, $elm$json$Json$Decode$int));
-var $author$project$User$User = F7(
-	function (username, nickname, color, team, score, is_admin, is_muted) {
-		return {color: color, is_admin: is_admin, is_muted: is_muted, nickname: nickname, score: score, team: team, username: username};
+var $author$project$Chat$chatMessageToChatline = F4(
+	function (room_name, user, message, timestamp) {
+		return A5($author$project$Chat$Chatline, room_name, user, message, timestamp, 1);
 	});
 var $elm$json$Json$Decode$bool = _Json_decodeBool;
+var $elm$json$Json$Decode$field = _Json_decodeField;
+var $elm$json$Json$Decode$int = _Json_decodeInt;
 var $elm$json$Json$Decode$map7 = _Json_map7;
+var $elm$json$Json$Decode$string = _Json_decodeString;
 var $author$project$User$decodeUser = A8(
 	$elm$json$Json$Decode$map7,
 	$author$project$User$User,
@@ -6044,6 +6050,43 @@ var $author$project$User$decodeUser = A8(
 	A2($elm$json$Json$Decode$field, 'score', $elm$json$Json$Decode$int),
 	A2($elm$json$Json$Decode$field, 'is_admin', $elm$json$Json$Decode$bool),
 	A2($elm$json$Json$Decode$field, 'is_muted', $elm$json$Json$Decode$bool));
+var $elm$json$Json$Decode$map4 = _Json_map4;
+var $elm$json$Json$Decode$oneOf = _Json_oneOf;
+var $elm$json$Json$Decode$maybe = function (decoder) {
+	return $elm$json$Json$Decode$oneOf(
+		_List_fromArray(
+			[
+				A2($elm$json$Json$Decode$map, $elm$core$Maybe$Just, decoder),
+				$elm$json$Json$Decode$succeed($elm$core$Maybe$Nothing)
+			]));
+};
+var $author$project$Chat$decodeChatline = A5(
+	$elm$json$Json$Decode$map4,
+	$author$project$Chat$chatMessageToChatline,
+	A2($elm$json$Json$Decode$field, 'room_name', $elm$json$Json$Decode$string),
+	$elm$json$Json$Decode$maybe(
+		A2($elm$json$Json$Decode$field, 'user', $author$project$User$decodeUser)),
+	A2($elm$json$Json$Decode$field, 'message', $elm$json$Json$Decode$string),
+	A2($elm$json$Json$Decode$field, 'timestamp', $elm$json$Json$Decode$string));
+var $author$project$Canoe$JSONMessage = F2(
+	function (action, content) {
+		return {action: action, content: content};
+	});
+var $author$project$Canoe$decodeJSON = A3(
+	$elm$json$Json$Decode$map2,
+	$author$project$Canoe$JSONMessage,
+	A2($elm$json$Json$Decode$field, 'action', $elm$json$Json$Decode$string),
+	A2($elm$json$Json$Decode$field, 'content', $elm$json$Json$Decode$value));
+var $elm$json$Json$Decode$index = _Json_decodeIndex;
+var $elm$core$Tuple$pair = F2(
+	function (a, b) {
+		return _Utils_Tuple2(a, b);
+	});
+var $author$project$Canoe$decodeMoveTuple = A3(
+	$elm$json$Json$Decode$map2,
+	$elm$core$Tuple$pair,
+	A2($elm$json$Json$Decode$index, 0, $elm$json$Json$Decode$int),
+	A2($elm$json$Json$Decode$index, 1, $elm$json$Json$Decode$int));
 var $elm$core$Dict$fromList = function (assocs) {
 	return A3(
 		$elm$core$List$foldl,
@@ -6111,30 +6154,8 @@ var $author$project$User$decodeUsersList = A2(
 	$elm$core$Dict$map($author$project$User$halfUserToUser),
 	$elm$json$Json$Decode$dict($author$project$User$halfUserDecoder));
 var $elm$json$Json$Decode$decodeValue = _Json_run;
-var $elm$core$List$filter = F2(
-	function (isGood, list) {
-		return A3(
-			$elm$core$List$foldr,
-			F2(
-				function (x, xs) {
-					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
-				}),
-			_List_Nil,
-			list);
-	});
+var $elm$json$Json$Encode$bool = _Json_wrap;
 var $elm$json$Json$Encode$int = _Json_wrap;
-var $elm$json$Json$Decode$list = _Json_decodeList;
-var $elm$json$Json$Encode$list = F2(
-	function (func, entries) {
-		return _Json_wrap(
-			A3(
-				$elm$core$List$foldl,
-				_Json_addEntry(func),
-				_Json_emptyArray(_Utils_Tuple0),
-				entries));
-	});
-var $elm$core$Debug$log = _Debug_log;
-var $elm$core$Basics$not = _Basics_not;
 var $elm$json$Json$Encode$object = function (pairs) {
 	return _Json_wrap(
 		A3(
@@ -6148,7 +6169,107 @@ var $elm$json$Json$Encode$object = function (pairs) {
 			_Json_emptyObject(_Utils_Tuple0),
 			pairs));
 };
+var $author$project$User$encodeUser = function (user) {
+	return $elm$json$Json$Encode$object(
+		_List_fromArray(
+			[
+				_Utils_Tuple2(
+				'username',
+				$elm$json$Json$Encode$string(user.username)),
+				_Utils_Tuple2(
+				'nickname',
+				$elm$json$Json$Encode$string(user.nickname)),
+				_Utils_Tuple2(
+				'color',
+				$elm$json$Json$Encode$string(user.color)),
+				_Utils_Tuple2(
+				'team',
+				$elm$json$Json$Encode$int(user.team)),
+				_Utils_Tuple2(
+				'score',
+				$elm$json$Json$Encode$int(user.score)),
+				_Utils_Tuple2(
+				'is_admin',
+				$elm$json$Json$Encode$bool(user.is_admin)),
+				_Utils_Tuple2(
+				'is_muted',
+				$elm$json$Json$Encode$bool(user.is_muted))
+			]));
+};
+var $author$project$Chat$encodeChatline = F4(
+	function (room_name, user, message, kind) {
+		return $elm$json$Json$Encode$object(
+			_List_fromArray(
+				[
+					_Utils_Tuple2(
+					'room_name',
+					$elm$json$Json$Encode$string(room_name)),
+					_Utils_Tuple2(
+					'user',
+					$author$project$User$encodeUser(user)),
+					_Utils_Tuple2(
+					'message',
+					$elm$json$Json$Encode$string(message)),
+					_Utils_Tuple2(
+					'kind',
+					$elm$json$Json$Encode$int(kind))
+				]));
+	});
+var $elm$core$List$filter = F2(
+	function (isGood, list) {
+		return A3(
+			$elm$core$List$foldr,
+			F2(
+				function (x, xs) {
+					return isGood(x) ? A2($elm$core$List$cons, x, xs) : xs;
+				}),
+			_List_Nil,
+			list);
+	});
+var $elm$json$Json$Decode$list = _Json_decodeList;
+var $elm$json$Json$Encode$list = F2(
+	function (func, entries) {
+		return _Json_wrap(
+			A3(
+				$elm$core$List$foldl,
+				_Json_addEntry(func),
+				_Json_emptyArray(_Utils_Tuple0),
+				entries));
+	});
+var $elm$core$Debug$log = _Debug_log;
+var $elm$core$List$any = F2(
+	function (isOkay, list) {
+		any:
+		while (true) {
+			if (!list.b) {
+				return false;
+			} else {
+				var x = list.a;
+				var xs = list.b;
+				if (isOkay(x)) {
+					return true;
+				} else {
+					var $temp$isOkay = isOkay,
+						$temp$list = xs;
+					isOkay = $temp$isOkay;
+					list = $temp$list;
+					continue any;
+				}
+			}
+		}
+	});
+var $elm$core$List$member = F2(
+	function (x, xs) {
+		return A2(
+			$elm$core$List$any,
+			function (a) {
+				return _Utils_eq(a, x);
+			},
+			xs);
+	});
+var $elm$core$Basics$not = _Basics_not;
 var $author$project$Canoe$outputPort = _Platform_outgoingPort('outputPort', $elm$json$Json$Encode$string);
+var $elm$core$String$trim = _String_trim;
 var $author$project$Toast$Leaving = {$: 'Leaving'};
 var $author$project$Toast$Remove = function (a) {
 	return {$: 'Remove', a: a};
@@ -6223,6 +6344,15 @@ var $elm$core$Dict$values = function (dict) {
 		_List_Nil,
 		dict);
 };
+var $elm$core$Maybe$withDefault = F2(
+	function (_default, maybe) {
+		if (maybe.$ === 'Just') {
+			var value = maybe.a;
+			return value;
+		} else {
+			return _default;
+		}
+	});
 var $author$project$Canoe$update = F2(
 	function (msg, model) {
 		update:
@@ -6235,11 +6365,158 @@ var $author$project$Canoe$update = F2(
 							model,
 							{nameInProgress: name}),
 						$elm$core$Platform$Cmd$none);
-				case 'NewGame':
+				case 'SetColor':
+					var color = msg.a;
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
-							{gameOver: false}),
+							{colorInProgress: color}),
+						$elm$core$Platform$Cmd$none);
+				case 'UpdateSettings':
+					var oldUsers = model.users;
+					var oldUser = function () {
+						var _v1 = model.user;
+						if (_v1.$ === 'Nothing') {
+							return A7($author$project$User$User, '', '', '', 0, 0, false, false);
+						} else {
+							var u = _v1.a;
+							return u;
+						}
+					}();
+					var oldToggleStates = model.toggleStates;
+					var oldName = oldUser.nickname;
+					var newToggleStates = _Utils_update(
+						oldToggleStates,
+						{settings: 'none'});
+					var newName = A2(
+						$elm$core$List$member,
+						model.nameInProgress,
+						A2(
+							$elm$core$List$map,
+							function ($) {
+								return $.nickname;
+							},
+							oldUsers)) ? oldName : (($elm$core$String$length(model.nameInProgress) > 0) ? model.nameInProgress : oldName);
+					var newColor = model.colorInProgress;
+					var newUser = _Utils_update(
+						oldUser,
+						{color: newColor, nickname: newName});
+					var replaceUser = function (testUser) {
+						return _Utils_eq(oldUser.nickname, testUser.nickname) ? _Utils_update(
+							testUser,
+							{color: newColor, nickname: newName}) : testUser;
+					};
+					var newUsers = A2($elm$core$List$map, replaceUser, oldUsers);
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{
+								nameInProgress: '',
+								toggleStates: newToggleStates,
+								user: $elm$core$Maybe$Just(newUser),
+								users: newUsers
+							}),
+						$author$project$Canoe$outputPort(
+							A2(
+								$elm$json$Json$Encode$encode,
+								0,
+								$elm$json$Json$Encode$object(
+									_List_fromArray(
+										[
+											_Utils_Tuple2(
+											'action',
+											$elm$json$Json$Encode$string('update_user')),
+											_Utils_Tuple2(
+											'content',
+											$author$project$User$encodeUser(newUser))
+										])))));
+				case 'SetMessage':
+					var message = msg.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{messageInProgress: message}),
+						$elm$core$Platform$Cmd$none);
+				case 'SendMessage':
+					var newmsg = $elm$core$String$trim(model.messageInProgress);
+					return (newmsg === '') ? _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{messageInProgress: ''}),
+						$elm$core$Platform$Cmd$none) : _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{messageInProgress: ''}),
+						$author$project$Canoe$outputPort(
+							A2(
+								$elm$json$Json$Encode$encode,
+								0,
+								$elm$json$Json$Encode$object(
+									_List_fromArray(
+										[
+											_Utils_Tuple2(
+											'action',
+											$elm$json$Json$Encode$string('update_chat')),
+											_Utils_Tuple2(
+											'content',
+											A4(
+												$author$project$Chat$encodeChatline,
+												model.room_name,
+												A2(
+													$elm$core$Maybe$withDefault,
+													A7($author$project$User$User, '', '', '', 0, 0, false, false),
+													model.user),
+												newmsg,
+												0))
+										])))));
+				case 'TogglePollOptions':
+					var oldToggleStates = model.toggleStates;
+					var newToggleStates = _Utils_update(
+						oldToggleStates,
+						{
+							emoticons: 'none',
+							pollOptions: (oldToggleStates.pollOptions === 'none') ? 'flex' : 'none',
+							settings: 'none'
+						});
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{toggleStates: newToggleStates}),
+						$elm$core$Platform$Cmd$none);
+				case 'ToggleSettings':
+					var oldToggleStates = model.toggleStates;
+					var newToggleStates = _Utils_update(
+						oldToggleStates,
+						{
+							emoticons: 'none',
+							pollOptions: 'none',
+							settings: (oldToggleStates.settings === 'none') ? 'flex' : 'none'
+						});
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{toggleStates: newToggleStates}),
+						$elm$core$Platform$Cmd$none);
+				case 'ToggleEmoticons':
+					var oldToggleStates = model.toggleStates;
+					var newToggleStates = _Utils_update(
+						oldToggleStates,
+						{
+							emoticons: (oldToggleStates.emoticons === 'none') ? 'flex' : 'none',
+							pollOptions: 'none',
+							settings: 'none'
+						});
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{toggleStates: newToggleStates}),
+						$elm$core$Platform$Cmd$none);
+				case 'InsertEmoticon':
+					var str = msg.a;
+					return _Utils_Tuple2(
+						_Utils_update(
+							model,
+							{messageInProgress: model.messageInProgress + (' :' + (str + ': '))}),
 						$elm$core$Platform$Cmd$none);
 				case 'Tick':
 					var newTime = msg.a;
@@ -6271,15 +6548,11 @@ var $author$project$Canoe$update = F2(
 										])))));
 				case 'GetJSON':
 					var json = msg.a;
-					var _v1 = A2($elm$json$Json$Decode$decodeValue, $author$project$Canoe$decodeJSON, json);
-					if (_v1.$ === 'Ok') {
-						var action = _v1.a.action;
-						var content = _v1.a.content;
+					var _v2 = A2($elm$json$Json$Decode$decodeValue, $author$project$Canoe$decodeJSON, json);
+					if (_v2.$ === 'Ok') {
+						var action = _v2.a.action;
+						var content = _v2.a.content;
 						switch (action) {
-							case 'update_chat':
-								return _Utils_Tuple2(
-									A2($elm$core$Debug$log, 'Error: not implemented', model),
-									$elm$core$Platform$Cmd$none);
 							case 'update_scoreboard':
 								var $temp$msg = $author$project$Canoe$GetUsersList(content),
 									$temp$model = model;
@@ -6322,6 +6595,36 @@ var $author$project$Canoe$update = F2(
 								msg = $temp$msg;
 								model = $temp$model;
 								continue update;
+							case 'new_game':
+								var $temp$msg = $author$project$Canoe$NewGame(content),
+									$temp$model = model;
+								msg = $temp$msg;
+								model = $temp$model;
+								continue update;
+							case 'update_chat':
+								var $temp$msg = $author$project$Canoe$GetChat(content),
+									$temp$model = model;
+								msg = $temp$msg;
+								model = $temp$model;
+								continue update;
+							case 'player_chat_new_message':
+								var $temp$msg = $author$project$Canoe$GetChat(content),
+									$temp$model = model;
+								msg = $temp$msg;
+								model = $temp$model;
+								continue update;
+							case 'system_chat_new_message':
+								var $temp$msg = $author$project$Canoe$GetChat(content),
+									$temp$model = model;
+								msg = $temp$msg;
+								model = $temp$model;
+								continue update;
+							case 'system_chat_to_player_new_message':
+								var $temp$msg = $author$project$Canoe$GetChat(content),
+									$temp$model = model;
+								msg = $temp$msg;
+								model = $temp$model;
+								continue update;
 							default:
 								return _Utils_Tuple2(
 									A2($elm$core$Debug$log, 'Error: unknown code in JSON message', model),
@@ -6338,13 +6641,13 @@ var $author$project$Canoe$update = F2(
 					}
 				case 'GetBoard':
 					var json = msg.a;
-					var _v3 = A2(
+					var _v4 = A2(
 						$elm$json$Json$Decode$decodeValue,
 						$elm$json$Json$Decode$list(
 							$elm$json$Json$Decode$list($elm$json$Json$Decode$int)),
 						json);
-					if (_v3.$ === 'Ok') {
-						var board = _v3.a;
+					if (_v4.$ === 'Ok') {
+						var board = _v4.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
@@ -6359,11 +6662,11 @@ var $author$project$Canoe$update = F2(
 					}
 				case 'GetUsersList':
 					var json = msg.a;
-					var _v4 = A2($elm$json$Json$Decode$decodeValue, $author$project$User$decodeUsersList, json);
-					if (_v4.$ === 'Ok') {
-						var usersList = _v4.a;
+					var _v5 = A2($elm$json$Json$Decode$decodeValue, $author$project$User$decodeUsersList, json);
+					if (_v5.$ === 'Ok') {
+						var usersList = _v5.a;
 						var red_user = function () {
-							var _v6 = A2(
+							var _v7 = A2(
 								$elm$core$List$filter,
 								function (z) {
 									return function ($) {
@@ -6371,15 +6674,15 @@ var $author$project$Canoe$update = F2(
 									}(z) === 1;
 								},
 								$elm$core$Dict$values(usersList));
-							if (!_v6.b) {
+							if (!_v7.b) {
 								return $elm$core$Maybe$Nothing;
 							} else {
-								var u = _v6.a;
+								var u = _v7.a;
 								return $elm$core$Maybe$Just(u);
 							}
 						}();
 						var blue_user = function () {
-							var _v5 = A2(
+							var _v6 = A2(
 								$elm$core$List$filter,
 								function (z) {
 									return function ($) {
@@ -6387,10 +6690,10 @@ var $author$project$Canoe$update = F2(
 									}(z) === 2;
 								},
 								$elm$core$Dict$values(usersList));
-							if (!_v5.b) {
+							if (!_v6.b) {
 								return $elm$core$Maybe$Nothing;
 							} else {
-								var u = _v5.a;
+								var u = _v6.a;
 								return $elm$core$Maybe$Just(u);
 							}
 						}();
@@ -6412,9 +6715,9 @@ var $author$project$Canoe$update = F2(
 					}
 				case 'GetUser':
 					var json = msg.a;
-					var _v7 = A2($elm$json$Json$Decode$decodeValue, $author$project$User$decodeUser, json);
-					if (_v7.$ === 'Ok') {
-						var user = _v7.a;
+					var _v8 = A2($elm$json$Json$Decode$decodeValue, $author$project$User$decodeUser, json);
+					if (_v8.$ === 'Ok') {
+						var user = _v8.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
@@ -6431,9 +6734,9 @@ var $author$project$Canoe$update = F2(
 					}
 				case 'GetMessage':
 					var json = msg.a;
-					var _v8 = A2($elm$json$Json$Decode$decodeValue, $elm$json$Json$Decode$string, json);
-					if (_v8.$ === 'Ok') {
-						var message = _v8.a;
+					var _v9 = A2($elm$json$Json$Decode$decodeValue, $elm$json$Json$Decode$string, json);
+					if (_v9.$ === 'Ok') {
+						var message = _v9.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
@@ -6448,9 +6751,9 @@ var $author$project$Canoe$update = F2(
 					}
 				case 'GetFlashMessage':
 					var json = msg.a;
-					var _v9 = A2($elm$json$Json$Decode$decodeValue, $elm$json$Json$Decode$string, json);
-					if (_v9.$ === 'Ok') {
-						var message = _v9.a;
+					var _v10 = A2($elm$json$Json$Decode$decodeValue, $elm$json$Json$Decode$string, json);
+					if (_v10.$ === 'Ok') {
+						var message = _v10.a;
 						return A2(
 							$author$project$Canoe$addToast,
 							A2($author$project$Toast$Success, '', message),
@@ -6468,9 +6771,9 @@ var $author$project$Canoe$update = F2(
 					}
 				case 'GetLastMove':
 					var json = msg.a;
-					var _v10 = A2($elm$json$Json$Decode$decodeValue, $author$project$Canoe$decodeMoveTuple, json);
-					if (_v10.$ === 'Ok') {
-						var tuple = _v10.a;
+					var _v11 = A2($elm$json$Json$Decode$decodeValue, $author$project$Canoe$decodeMoveTuple, json);
+					if (_v11.$ === 'Ok') {
+						var tuple = _v11.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
@@ -6483,11 +6786,28 @@ var $author$project$Canoe$update = F2(
 								{debugString: 'Error parsing Flash Message JSON'}),
 							$elm$core$Platform$Cmd$none);
 					}
+				case 'NewGame':
+					var json = msg.a;
+					var _v12 = A2($elm$json$Json$Decode$decodeValue, $elm$json$Json$Decode$string, json);
+					if (_v12.$ === 'Ok') {
+						var message = _v12.a;
+						return _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{gameOver: false, topMessage: message}),
+							$elm$core$Platform$Cmd$none);
+					} else {
+						return _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{debugString: 'Error parsing game_over JSON'}),
+							$elm$core$Platform$Cmd$none);
+					}
 				case 'GameOver':
 					var json = msg.a;
-					var _v11 = A2($elm$json$Json$Decode$decodeValue, $elm$json$Json$Decode$string, json);
-					if (_v11.$ === 'Ok') {
-						var message = _v11.a;
+					var _v13 = A2($elm$json$Json$Decode$decodeValue, $elm$json$Json$Decode$string, json);
+					if (_v13.$ === 'Ok') {
+						var message = _v13.a;
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
@@ -6497,7 +6817,26 @@ var $author$project$Canoe$update = F2(
 						return _Utils_Tuple2(
 							_Utils_update(
 								model,
-								{debugString: 'Error parsing user JSON'}),
+								{debugString: 'Error parsing game_over JSON'}),
+							$elm$core$Platform$Cmd$none);
+					}
+				case 'GetChat':
+					var json = msg.a;
+					var _v14 = A2($elm$json$Json$Decode$decodeValue, $author$project$Chat$decodeChatline, json);
+					if (_v14.$ === 'Ok') {
+						var chatline = _v14.a;
+						return _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{
+									chat: A2($elm$core$List$cons, chatline, model.chat)
+								}),
+							$elm$core$Platform$Cmd$none);
+					} else {
+						return _Utils_Tuple2(
+							_Utils_update(
+								model,
+								{debugString: 'Error parsing chat JSON'}),
 							$elm$core$Platform$Cmd$none);
 					}
 				case 'ConnectToServer':
@@ -6649,9 +6988,25 @@ var $author$project$Canoe$update = F2(
 			}
 		}
 	});
+var $author$project$Canoe$SendMessage = {$: 'SendMessage'};
 var $author$project$Canoe$SendNewGame = {$: 'SendNewGame'};
 var $author$project$Canoe$SendResign = {$: 'SendResign'};
+var $author$project$Canoe$SetMessage = function (a) {
+	return {$: 'SetMessage', a: a};
+};
+var $author$project$Canoe$ToggleEmoticons = {$: 'ToggleEmoticons'};
 var $author$project$Canoe$ToggleHelp = {$: 'ToggleHelp'};
+var $author$project$Canoe$TogglePollOptions = {$: 'TogglePollOptions'};
+var $author$project$Canoe$ToggleSettings = {$: 'ToggleSettings'};
+var $elm$html$Html$aside = _VirtualDom_node('aside');
+var $elm$virtual_dom$VirtualDom$attribute = F2(
+	function (key, value) {
+		return A2(
+			_VirtualDom_attribute,
+			_VirtualDom_noOnOrFormAction(key),
+			_VirtualDom_noJavaScriptOrHtmlUri(value));
+	});
+var $elm$html$Html$Attributes$attribute = $elm$virtual_dom$VirtualDom$attribute;
 var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$div = _VirtualDom_node('div');
 var $elm$html$Html$h1 = _VirtualDom_node('h1');
@@ -6707,18 +7062,9 @@ var $author$project$Toast$defaultView = function (toast) {
 			return A3($author$project$Toast$genericToast, 'toasty-error', title, message);
 	}
 };
-var $elm$core$List$append = F2(
-	function (xs, ys) {
-		if (!ys.b) {
-			return xs;
-		} else {
-			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
-		}
-	});
-var $author$project$Canoe$AddMove = F2(
-	function (a, b) {
-		return {$: 'AddMove', a: a, b: b};
-	});
+var $author$project$Canoe$InsertEmoticon = function (a) {
+	return {$: 'InsertEmoticon', a: a};
+};
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
 };
@@ -6736,6 +7082,426 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
+var $author$project$Canoe$drawEmoticon = function (str) {
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('emoticon emoticon--' + str),
+				$elm$html$Html$Events$onClick(
+				$author$project$Canoe$InsertEmoticon(str))
+			]),
+		_List_Nil);
+};
+var $author$project$Canoe$emoticonList = _List_fromArray(
+	['cool', 'crazy', 'damn', 'geek', 'grin', 'huh', 'lol', 'love', 'omg', 'pout', 'sad', 'smile', 'stars', 'ugh', 'waiting', 'whoopsy', 'wink', 'wtf']);
+var $author$project$Canoe$drawEmoticons = A2($elm$core$List$map, $author$project$Canoe$drawEmoticon, $author$project$Canoe$emoticonList);
+var $elm$html$Html$em = _VirtualDom_node('em');
+var $elm$html$Html$object = _VirtualDom_node('object');
+var $elm$html$Html$span = _VirtualDom_node('span');
+var $author$project$Canoe$parseEmoticonHtml = function (str) {
+	var parseEmoticon = F3(
+		function (ind1, ind2, teststr) {
+			var parsedStr = A3($elm$core$String$slice, ind1 + 1, ind2, teststr);
+			return A2($elm$core$List$member, parsedStr, $author$project$Canoe$emoticonList) ? A2(
+				$elm$core$List$cons,
+				A2(
+					$elm$html$Html$span,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('emoticon emoticon--' + parsedStr)
+						]),
+					_List_Nil),
+				$author$project$Canoe$parseEmoticonHtml(
+					A2($elm$core$String$dropLeft, ind2 + 1, str))) : A2(
+				$elm$core$List$cons,
+				$elm$html$Html$text(':' + parsedStr),
+				$author$project$Canoe$parseEmoticonHtml(
+					A2($elm$core$String$dropLeft, ind2, str)));
+		});
+	var _v0 = A2($elm$core$String$indexes, ':', str);
+	if (_v0.b && _v0.b.b) {
+		var a = _v0.a;
+		var _v1 = _v0.b;
+		var b = _v1.a;
+		return A2(
+			$elm$core$List$cons,
+			$elm$html$Html$text(
+				A3($elm$core$String$slice, 0, a, str)),
+			A3(parseEmoticon, a, b, str));
+	} else {
+		return _List_fromArray(
+			[
+				$elm$html$Html$text(str)
+			]);
+	}
+};
+var $author$project$Canoe$drawMessage = function (message) {
+	var _v0 = message.kind;
+	if (_v0 === 2) {
+		return A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('chat__line')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$object,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('chat__line--svg'),
+							A2($elm$html$Html$Attributes$attribute, 'data', message.message)
+						]),
+					_List_Nil)
+				]));
+	} else {
+		var _v1 = message.user;
+		if (_v1.$ === 'Just') {
+			var user = _v1.a;
+			return A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('chat__line')
+					]),
+				A2(
+					$elm$core$List$cons,
+					A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('chat__username'),
+								A2($elm$html$Html$Attributes$style, 'color', user.color)
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text(user.nickname)
+							])),
+					$author$project$Canoe$parseEmoticonHtml(message.message)));
+		} else {
+			return A2(
+				$elm$html$Html$div,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('chat__line')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$em,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('chat__line--system')
+							]),
+						_List_fromArray(
+							[
+								$elm$html$Html$text(message.message)
+							]))
+					]));
+		}
+	}
+};
+var $elm$html$Html$h2 = _VirtualDom_node('h2');
+var $author$project$Canoe$drawPollOptions = _List_fromArray(
+	[
+		A2(
+		$elm$html$Html$h2,
+		_List_Nil,
+		_List_fromArray(
+			[
+				$elm$html$Html$text('Poll Commands')
+			])),
+		A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('poll__info')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('Use /poll <command> or /set <command> to change settings. UIDs can be found by hovering over usernames in the scoreboard.')
+			])),
+		A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('poll__command'),
+				A2($elm$html$Html$Attributes$attribute, 'flow', 'left'),
+				A2($elm$html$Html$Attributes$attribute, 'tooltip', 'Give \'owner\' status to user. Owners can use \'/set\'.')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('owner '),
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('red')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('UID')
+					]))
+			])),
+		A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('poll__command'),
+				A2($elm$html$Html$Attributes$attribute, 'flow', 'left'),
+				A2($elm$html$Html$Attributes$attribute, 'tooltip', 'Remove \'owner\' status from user.')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('demote '),
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('red')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('UID')
+					]))
+			])),
+		A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('poll__command'),
+				A2($elm$html$Html$Attributes$attribute, 'flow', 'left'),
+				A2($elm$html$Html$Attributes$attribute, 'tooltip', 'Mute user. Muted users cannot chat or create polls.')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('mute '),
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('red')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('UID')
+					]))
+			])),
+		A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('poll__command'),
+				A2($elm$html$Html$Attributes$attribute, 'flow', 'left'),
+				A2($elm$html$Html$Attributes$attribute, 'tooltip', 'Unmute user.')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('unmute '),
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('red')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('UID')
+					]))
+			])),
+		A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('poll__command'),
+				A2($elm$html$Html$Attributes$attribute, 'flow', 'left'),
+				A2($elm$html$Html$Attributes$attribute, 'tooltip', 'Kick user from the game.')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('kick '),
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('red')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('UID')
+					]))
+			])),
+		A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('poll__command'),
+				A2($elm$html$Html$Attributes$attribute, 'flow', 'left'),
+				A2($elm$html$Html$Attributes$attribute, 'tooltip', 'Set score of user to some number.')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('score '),
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('red')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('UID ')
+					])),
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('blue')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('int')
+					]))
+			])),
+		A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('poll__command'),
+				A2($elm$html$Html$Attributes$attribute, 'flow', 'left'),
+				A2($elm$html$Html$Attributes$attribute, 'tooltip', 'Reset all scores to 0.')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('reset_scores')
+			])),
+		A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('poll__command'),
+				A2($elm$html$Html$Attributes$attribute, 'flow', 'left'),
+				A2($elm$html$Html$Attributes$attribute, 'tooltip', 'Reset board walls, goals, and robot positions.')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('reset')
+			])),
+		A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('poll__command'),
+				A2($elm$html$Html$Attributes$attribute, 'flow', 'left'),
+				A2($elm$html$Html$Attributes$attribute, 'tooltip', 'Reset goal position.')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('new')
+			])),
+		A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('poll__command'),
+				A2($elm$html$Html$Attributes$attribute, 'flow', 'left'),
+				A2($elm$html$Html$Attributes$attribute, 'tooltip', 'Set time limit for polls in seconds. Must be at least 30.')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('poll_time '),
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('blue')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('int')
+					]))
+			])),
+		A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('poll__command'),
+				A2($elm$html$Html$Attributes$attribute, 'flow', 'left'),
+				A2($elm$html$Html$Attributes$attribute, 'tooltip', 'Set time limit for finding new solutions. Must be at least 0.')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('countdown_time '),
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('blue')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('int')
+					]))
+			])),
+		A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('poll__command'),
+				A2($elm$html$Html$Attributes$attribute, 'flow', 'left'),
+				A2($elm$html$Html$Attributes$attribute, 'tooltip', 'Set number of puzzles before a new board is shuffled.')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('puzzles_before_new_board '),
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('blue')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('int')
+					]))
+			])),
+		A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('poll__command'),
+				A2($elm$html$Html$Attributes$attribute, 'flow', 'left'),
+				A2($elm$html$Html$Attributes$attribute, 'tooltip', '1-robot solutions below this number will not add to score.')
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('min_moves '),
+				A2(
+				$elm$html$Html$span,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('blue')
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('int')
+					]))
+			]))
+	]);
+var $elm$core$List$append = F2(
+	function (xs, ys) {
+		if (!ys.b) {
+			return xs;
+		} else {
+			return A3($elm$core$List$foldr, $elm$core$List$cons, ys, xs);
+		}
+	});
+var $author$project$Canoe$AddMove = F2(
+	function (a, b) {
+		return {$: 'AddMove', a: a, b: b};
+	});
 var $author$project$Canoe$drawCells = F4(
 	function (x, y, remainingCells, lastMove) {
 		if (!remainingCells.b) {
@@ -6839,8 +7605,292 @@ var $author$project$Canoe$drawRows = F3(
 				A3($author$project$Canoe$drawRows, y + 1, rs, lastMove));
 		}
 	});
-var $elm$html$Html$em = _VirtualDom_node('em');
-var $elm$html$Html$span = _VirtualDom_node('span');
+var $author$project$Canoe$SetColor = function (a) {
+	return {$: 'SetColor', a: a};
+};
+var $author$project$Canoe$SetName = function (a) {
+	return {$: 'SetName', a: a};
+};
+var $author$project$Canoe$UpdateSettings = {$: 'UpdateSettings'};
+var $elm$html$Html$input = _VirtualDom_node('input');
+var $elm$html$Html$Events$alwaysStop = function (x) {
+	return _Utils_Tuple2(x, true);
+};
+var $elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
+	return {$: 'MayStopPropagation', a: a};
+};
+var $elm$html$Html$Events$stopPropagationOn = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$MayStopPropagation(decoder));
+	});
+var $elm$json$Json$Decode$at = F2(
+	function (fields, decoder) {
+		return A3($elm$core$List$foldr, $elm$json$Json$Decode$field, decoder, fields);
+	});
+var $elm$html$Html$Events$targetValue = A2(
+	$elm$json$Json$Decode$at,
+	_List_fromArray(
+		['target', 'value']),
+	$elm$json$Json$Decode$string);
+var $elm$html$Html$Events$onInput = function (tagger) {
+	return A2(
+		$elm$html$Html$Events$stopPropagationOn,
+		'input',
+		A2(
+			$elm$json$Json$Decode$map,
+			$elm$html$Html$Events$alwaysStop,
+			A2($elm$json$Json$Decode$map, tagger, $elm$html$Html$Events$targetValue)));
+};
+var $elm$html$Html$option = _VirtualDom_node('option');
+var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
+var $elm$html$Html$select = _VirtualDom_node('select');
+var $elm$html$Html$Attributes$type_ = $elm$html$Html$Attributes$stringProperty('type');
+var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
+var $author$project$Canoe$drawSettings = function (model) {
+	return _List_fromArray(
+		[
+			A2(
+			$elm$html$Html$h2,
+			_List_Nil,
+			_List_fromArray(
+				[
+					$elm$html$Html$text('Settings')
+				])),
+			A2(
+			$elm$html$Html$div,
+			_List_fromArray(
+				[
+					$elm$html$Html$Attributes$class('settings__flexbox')
+				]),
+			_List_fromArray(
+				[
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('setting__input')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$input,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$type_('text'),
+									$elm$html$Html$Events$onInput($author$project$Canoe$SetName),
+									$elm$html$Html$Attributes$placeholder('New name'),
+									$elm$html$Html$Attributes$value(model.nameInProgress)
+								]),
+							_List_Nil)
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('setting__input')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$select,
+							_List_fromArray(
+								[
+									$elm$html$Html$Events$onInput($author$project$Canoe$SetColor)
+								]),
+							_List_fromArray(
+								[
+									A2(
+									$elm$html$Html$option,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$value(''),
+											A2($elm$html$Html$Attributes$style, 'color', '#707070')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('Change color')
+										])),
+									A2(
+									$elm$html$Html$option,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$value('#e05e5e'),
+											A2($elm$html$Html$Attributes$style, 'color', '#e05e5e')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('red')
+										])),
+									A2(
+									$elm$html$Html$option,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$value('#e09f5e'),
+											A2($elm$html$Html$Attributes$style, 'color', '#e09f5e')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('orange')
+										])),
+									A2(
+									$elm$html$Html$option,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$value('#e0e05e'),
+											A2($elm$html$Html$Attributes$style, 'color', '#e0e05e')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('yellow')
+										])),
+									A2(
+									$elm$html$Html$option,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$value('#9fe05e'),
+											A2($elm$html$Html$Attributes$style, 'color', '#9fe05e')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('lime')
+										])),
+									A2(
+									$elm$html$Html$option,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$value('#5ee05e'),
+											A2($elm$html$Html$Attributes$style, 'color', '#5ee05e')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('dark sea')
+										])),
+									A2(
+									$elm$html$Html$option,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$value('#5ee09f'),
+											A2($elm$html$Html$Attributes$style, 'color', '#5ee09f')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('aquamarine')
+										])),
+									A2(
+									$elm$html$Html$option,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$value('#5ee0e0'),
+											A2($elm$html$Html$Attributes$style, 'color', '#5ee0e0')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('azure')
+										])),
+									A2(
+									$elm$html$Html$option,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$value('#5e9fe0'),
+											A2($elm$html$Html$Attributes$style, 'color', '#5e9fe0')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('cornflower')
+										])),
+									A2(
+									$elm$html$Html$option,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$value('#5e5ee0'),
+											A2($elm$html$Html$Attributes$style, 'color', '#5e5ee0')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('periwinkle')
+										])),
+									A2(
+									$elm$html$Html$option,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$value('#9f5ee0'),
+											A2($elm$html$Html$Attributes$style, 'color', '#9f5ee0')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('dendrobium ')
+										])),
+									A2(
+									$elm$html$Html$option,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$value('#e05ee0'),
+											A2($elm$html$Html$Attributes$style, 'color', '#e05ee0')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('french rose')
+										])),
+									A2(
+									$elm$html$Html$option,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$value('#e05e9f'),
+											A2($elm$html$Html$Attributes$style, 'color', '#e05e9f')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('barbie-mobile')
+										])),
+									A2(
+									$elm$html$Html$option,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$value('#b19278'),
+											A2($elm$html$Html$Attributes$style, 'color', '#b19278')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('english elm')
+										])),
+									A2(
+									$elm$html$Html$option,
+									_List_fromArray(
+										[
+											$elm$html$Html$Attributes$value('#e0e0e0'),
+											A2($elm$html$Html$Attributes$style, 'color', '#e0e0e0')
+										]),
+									_List_fromArray(
+										[
+											$elm$html$Html$text('gainsboro')
+										]))
+								]))
+						])),
+					A2(
+					$elm$html$Html$div,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('setting__submit')
+						]),
+					_List_fromArray(
+						[
+							A2(
+							$elm$html$Html$input,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$type_('submit'),
+									$elm$html$Html$Attributes$class('submit'),
+									$elm$html$Html$Attributes$value('Update'),
+									$elm$html$Html$Events$onClick($author$project$Canoe$UpdateSettings)
+								]),
+							_List_Nil)
+						]))
+				]))
+		]);
+};
 var $author$project$Canoe$formatName = F3(
 	function (user, color, isUser) {
 		if (user.$ === 'Nothing') {
@@ -6881,11 +7931,12 @@ var $author$project$Canoe$formatName = F3(
 					_List_Nil),
 					A2(
 					$elm$html$Html$span,
-					_List_fromArray(
+					isUser ? _List_fromArray(
 						[
-							$elm$html$Html$Attributes$class(
-							isUser ? 'bold' : '')
-						]),
+							$elm$html$Html$Attributes$class('bold'),
+							A2($elm$html$Html$Attributes$attribute, 'flow', 'up'),
+							A2($elm$html$Html$Attributes$attribute, 'tooltip', 'This is you!')
+						]) : _List_Nil,
 					_List_fromArray(
 						[
 							$elm$html$Html$text(u.nickname),
@@ -6917,6 +7968,33 @@ var $author$project$Canoe$isSameUser = F2(
 		}
 	});
 var $elm$html$Html$main_ = _VirtualDom_node('main');
+var $elm$html$Html$Attributes$maxlength = function (n) {
+	return A2(
+		_VirtualDom_attribute,
+		'maxlength',
+		$elm$core$String$fromInt(n));
+};
+var $elm$json$Json$Decode$andThen = _Json_andThen;
+var $elm$virtual_dom$VirtualDom$Custom = function (a) {
+	return {$: 'Custom', a: a};
+};
+var $elm$html$Html$Events$custom = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Custom(decoder));
+	});
+var $elm$json$Json$Decode$fail = _Json_fail;
+var $elm$html$Html$Events$keyCode = A2($elm$json$Json$Decode$field, 'keyCode', $elm$json$Json$Decode$int);
+var $author$project$Canoe$onEnter = function (msg) {
+	var filterKey = function (code) {
+		return (code === 13) ? $elm$json$Json$Decode$succeed(
+			{message: msg, preventDefault: true, stopPropagation: false}) : $elm$json$Json$Decode$fail('ignored input');
+	};
+	var decoder = A2($elm$json$Json$Decode$andThen, filterKey, $elm$html$Html$Events$keyCode);
+	return A2($elm$html$Html$Events$custom, 'keydown', decoder);
+};
 var $author$project$Canoe$showHelp = A2(
 	$elm$html$Html$div,
 	_List_fromArray(
@@ -6941,11 +8019,41 @@ var $author$project$Canoe$showHelp = A2(
 						]),
 					_List_fromArray(
 						[
-							$elm$html$Html$text('HELP YA')
+							A2(
+							$elm$html$Html$h2,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Instructions')
+								])),
+							A2(
+							$elm$html$Html$p,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text('Players take turns placing \"tokens\" trying to complete four-token \"canoes\". A complete, valid canoe is as follows:')
+								])),
+							A2(
+							$elm$html$Html$div,
+							_List_fromArray(
+								[
+									$elm$html$Html$Attributes$class('help--canoes')
+								]),
+							_List_Nil),
+							A2(
+							$elm$html$Html$p,
+							_List_Nil,
+							_List_fromArray(
+								[
+									$elm$html$Html$text('The first player to complete two separate canoes (sharing no tokens) wins!')
+								]))
 						])),
 					A2(
 					$elm$html$Html$div,
-					_List_Nil,
+					_List_fromArray(
+						[
+							$elm$html$Html$Attributes$class('margin-left')
+						]),
 					_List_fromArray(
 						[
 							A2(
@@ -6965,6 +8073,18 @@ var $author$project$Canoe$showHelp = A2(
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
 var $author$project$Canoe$modalSpectators = F3(
 	function (red_user, blue_user, all_users) {
+		var spectators = A2(
+			$elm$core$List$filter,
+			function (x) {
+				return (!A2(
+					$author$project$Canoe$isSameUser,
+					$elm$core$Maybe$Just(x),
+					red_user)) && (!A2(
+					$author$project$Canoe$isSameUser,
+					$elm$core$Maybe$Just(x),
+					blue_user));
+			},
+			all_users);
 		return A2(
 			$elm$core$String$join,
 			', ',
@@ -6973,7 +8093,7 @@ var $author$project$Canoe$modalSpectators = F3(
 				function ($) {
 					return $.nickname;
 				},
-				all_users));
+				spectators));
 	});
 var $author$project$Canoe$SetTeam = function (a) {
 	return {$: 'SetTeam', a: a};
@@ -7107,6 +8227,7 @@ var $author$project$Canoe$showModal = F3(
 						]))
 				]));
 	});
+var $elm$html$Html$textarea = _VirtualDom_node('textarea');
 var $elm$core$List$isEmpty = function (xs) {
 	if (!xs.b) {
 		return true;
@@ -7170,6 +8291,9 @@ var $author$project$Toast$view = F4(
 				toasts));
 	});
 var $author$project$Canoe$view = function (model) {
+	var drawChat = function (chat) {
+		return A2($elm$core$List$map, $author$project$Canoe$drawMessage, chat);
+	};
 	var drawBoard = F2(
 		function (board, lastMove) {
 			return A3($author$project$Canoe$drawRows, 0, board, lastMove);
@@ -7313,8 +8437,126 @@ var $author$project$Canoe$view = function (model) {
 									]))
 							]))
 					])),
-				(_Utils_eq(model.red, $elm$core$Maybe$Nothing) || _Utils_eq(model.blue, $elm$core$Maybe$Nothing)) ? A3($author$project$Canoe$showModal, model.red, model.blue, model.users) : A2($elm$html$Html$div, _List_Nil, _List_Nil),
-				model.showHelp ? $author$project$Canoe$showHelp : A2($elm$html$Html$div, _List_Nil, _List_Nil)
+				A2(
+				$elm$html$Html$aside,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('sidebar'),
+						A2($elm$html$Html$Attributes$attribute, 'data-role', 'sidebar')
+					]),
+				_List_fromArray(
+					[
+						A2(
+						$elm$html$Html$h2,
+						_List_Nil,
+						_List_fromArray(
+							[
+								$elm$html$Html$text('Chat')
+							])),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('chat'),
+								$elm$html$Html$Attributes$id('chat')
+							]),
+						drawChat(
+							$elm$core$List$reverse(model.chat))),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('sidebar__settings ' + ('module-' + model.toggleStates.settings))
+							]),
+						$author$project$Canoe$drawSettings(model)),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('sidebar__polloptions ' + ('module-' + model.toggleStates.pollOptions))
+							]),
+						$author$project$Canoe$drawPollOptions),
+						A2(
+						$elm$html$Html$div,
+						_List_fromArray(
+							[
+								$elm$html$Html$Attributes$class('message')
+							]),
+						_List_fromArray(
+							[
+								A2(
+								$elm$html$Html$textarea,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('message__box'),
+										$author$project$Canoe$onEnter($author$project$Canoe$SendMessage),
+										$elm$html$Html$Events$onInput($author$project$Canoe$SetMessage),
+										$elm$html$Html$Attributes$placeholder('Send a message'),
+										$elm$html$Html$Attributes$value(model.messageInProgress),
+										$elm$html$Html$Attributes$maxlength(255)
+									]),
+								_List_Nil),
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('sidebar__emoticons ' + ('module-' + model.toggleStates.emoticons))
+									]),
+								$author$project$Canoe$drawEmoticons),
+								A2(
+								$elm$html$Html$div,
+								_List_fromArray(
+									[
+										$elm$html$Html$Attributes$class('message__actions')
+									]),
+								_List_fromArray(
+									[
+										A2(
+										$elm$html$Html$button,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('settings'),
+												$elm$html$Html$Events$onClick($author$project$Canoe$ToggleSettings)
+											]),
+										_List_Nil),
+										A2(
+										$elm$html$Html$button,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('poll'),
+												$elm$html$Html$Events$onClick($author$project$Canoe$TogglePollOptions)
+											]),
+										_List_Nil),
+										A2(
+										$elm$html$Html$div,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('flex-spacer')
+											]),
+										_List_Nil),
+										A2(
+										$elm$html$Html$button,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$class('emoticons'),
+												$elm$html$Html$Events$onClick($author$project$Canoe$ToggleEmoticons)
+											]),
+										_List_Nil),
+										A2(
+										$elm$html$Html$input,
+										_List_fromArray(
+											[
+												$elm$html$Html$Attributes$type_('submit'),
+												$elm$html$Html$Attributes$class('submit'),
+												$elm$html$Html$Attributes$value('Send'),
+												$elm$html$Html$Events$onClick($author$project$Canoe$SendMessage)
+											]),
+										_List_Nil)
+									]))
+							]))
+					])),
+				(_Utils_eq(model.red, $elm$core$Maybe$Nothing) || _Utils_eq(model.blue, $elm$core$Maybe$Nothing)) ? A3($author$project$Canoe$showModal, model.red, model.blue, model.users) : $elm$html$Html$text(''),
+				model.showHelp ? $author$project$Canoe$showHelp : $elm$html$Html$text('')
 			]));
 };
 var $author$project$Canoe$main = $elm$browser$Browser$element(

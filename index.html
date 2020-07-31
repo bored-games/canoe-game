@@ -3,10 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <title>Canoe</title>
-  <link rel="stylesheet" href="http://localhost:8002/assets/css/style.css">
-
-  <script src="http://localhost:8002/assets/js/main.js"></script>
-
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/gameboy.css">
+  <script src="assets/js/main.js"></script>
 </head>
 
 <body>
@@ -65,22 +64,6 @@
 
   window.onload = function() {
     setupSocket();
-    /*
-    var mutationObserver = new MutationObserver(function(mutations) {
-      mutations.forEach(function(mutation) {
-        instance = OverlayScrollbars(document.getElementById("scores__inner"), { });
-        instance2 = OverlayScrollbars(document.getElementById("chat"), { });
-      })
-    });
-
-    document.onkeypress = function (e) {
-      e = e || window.event;
-      alert("ok");
-      instance = OverlayScrollbars(document.getElementById("scores__inner"), { });
-      instance2 = OverlayScrollbars(document.getElementById("chat"), { });
-    // use e.keyCode
-    };
-    */
   }
  
 
