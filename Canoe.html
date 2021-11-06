@@ -12,67 +12,63 @@
 <body>
   <main id="elm-node"></main>
 
-
-<script type="text/javascript">
-    
-  // prevent backspace from redirecting browser
-  window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+0008'||e.keyIdentifier=='Backspace'||e.keyCode==8){if(e.target==document.body){e.preventDefault();return false;}}},true);
-
-  var socket;
-  var instance;
-  var app = Elm.Canoe.init({node:document.getElementById('elm-node')});
-
-  
-  function setupSocket() {
-    
-    const urlParams = new URLSearchParams(window.location.search);
-    const room_name = urlParams.get('room');
-    socket = new WebSocket("ws://localhost:4000/ws/canoe/" + room_name, "TEMP_KEY")
-
-    socket.onclose = function() {
-      alert("Connection to the server has been lost.");
-    }
-
-    socket.onerror = function() {
-      alert("Server connection has experienced an unknown error.");
-    }
-
-    socket.onopen = function() {
+  <script type="text/javascript" src="./assets/js/config.js"></script>
+  <script type="text/javascript">
       
-      app.ports.outputPort.subscribe(function (data) {
-        console.log("Message from client:")
-        console.log(data);
-        socket.send(data);
-      });
+    // prevent backspace from redirecting browser
+    window.addEventListener('keydown',function(e){if(e.keyIdentifier=='U+0008'||e.keyIdentifier=='Backspace'||e.keyCode==8){if(e.target==document.body){e.preventDefault();return false;}}},true);
+
+    var socket;
+    var instance;
+    var app = Elm.Canoe.init({node:document.getElementById('elm-node')});
+
+    
+    function setupSocket() {
+      
+      const urlParams = new URLSearchParams(window.location.search);
+      const room_name = urlParams.get('room');
+      socket = new WebSocket(server_host + room_name, "TEMP_KEY")
+
+      socket.onclose = function() {
+        alert("Connection to the server has been lost.");
+      }
+
+      socket.onerror = function() {
+        alert("Server connection has experienced an unknown error.");
+      }
+
+      socket.onopen = function() {
+        
+        app.ports.outputPort.subscribe(function (data) {
+          console.log("Message from client:")
+          console.log(data);
+          socket.send(data);
+        });
+
+      }
+
+      // reconnect on socket close?
+      socket.addEventListener("close", () => {
+        this.setupSocket()
+      })
+
+      // got message from server
+      socket.addEventListener("message", (event) => {
+        console.log("Message from server:" + event.data)
+        newJSON = JSON.parse(event.data)
+        console.log( newJSON );
+        app.ports.inputPort.send( newJSON );
+      })
 
     }
 
-    // reconnect on socket close?
-    socket.addEventListener("close", () => {
-      this.setupSocket()
-    })
 
-    // got message from server
-    socket.addEventListener("message", (event) => {
-      console.log("Message from server:" + event.data)
-      newJSON = JSON.parse(event.data)
-      console.log( newJSON );
-      app.ports.inputPort.send( newJSON );
-    })
+    window.onload = function() {
+      setupSocket();
+    }
+  
 
-  }
-
-
-  window.onload = function() {
-    setupSocket();
-  }
- 
-
-
-
-</script>
-
-
+  </script>
 
 
 
