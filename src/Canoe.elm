@@ -447,12 +447,6 @@ toastConfig : Toast.Config Msg
 toastConfig =
     Toast.defaultConfig |> Toast.delay 3300
 
-
--- addToast : Toast.Toast -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
--- addToast toast ( model, cmd ) =
---     Toast.addToast toastConfig AddToastMessage toast ( model, cmd )
-
-    
 addToast : Toast.Toast -> ( Model, Cmd Msg ) -> ( Model, Cmd Msg )
 addToast toast ( model, cmd ) =
     Toast.addToast toastConfig AddToastMessage toast ( model, cmd )
@@ -486,7 +480,7 @@ port inputPort : (Json.Encode.Value -> msg) -> Sub msg
 subscriptions : Model -> Sub Msg
 subscriptions _ =
   Sub.batch
-    [ Time.every 50000 Ping
+    [ Time.every 30000 Ping
     , Time.every 1000 Tick
     , inputPort GetJSON
     ]
@@ -665,7 +659,6 @@ modalUser user color teamid =
   case user of
      Nothing -> div [ class ("modal_" ++ String.toLower color), onClick (SetTeam teamid) ] [ div [ class "pad" ] [ h3 [] [ text (color ++ " player") ], h4 [] [ text "Click to join" ] ] ]
      Just u -> div [ class ("inactive modal_" ++ String.toLower color), onClick (SetTeam 0) ] [ div [ class "pad" ] [ h3 [] [ text (color ++ " player") ], h4 [] [ text u.nickname ] ] ]
-
 
 showModal : Maybe User -> Maybe User -> List (User) -> Html Msg
 showModal red blue users = 
