@@ -12,6 +12,7 @@ type alias User =
   , score : Int
   , is_admin : Bool
   , is_muted : Bool
+  , is_bot : Bool
   }
 
   
@@ -23,11 +24,12 @@ encodeUser user =
                        ("team", Json.Encode.int user.team),
                        ("score", Json.Encode.int user.score),
                        ("is_admin", Json.Encode.bool user.is_admin),
-                       ("is_muted", Json.Encode.bool user.is_muted) ]
+                       ("is_muted", Json.Encode.bool user.is_muted),
+                       ("is_bot", Json.Encode.bool user.is_bot) ]
 
 decodeUser : Json.Decode.Decoder User
 decodeUser =
-  Json.Decode.map7
+  Json.Decode.map8
     User
     (Json.Decode.field "username" Json.Decode.string)
     (Json.Decode.field "nickname" Json.Decode.string)
@@ -36,6 +38,7 @@ decodeUser =
     (Json.Decode.field "score" Json.Decode.int)
     (Json.Decode.field "is_admin" Json.Decode.bool)
     (Json.Decode.field "is_muted" Json.Decode.bool)
+    (Json.Decode.field "is_bot" Json.Decode.bool)
   
 decodeUsersList : Json.Decode.Decoder (Dict.Dict String User)
 decodeUsersList =
@@ -48,20 +51,22 @@ type alias HalfUser =
   , score: Int
   , isadmin: Bool
   , ismuted: Bool
+  , isbot: Bool
   }
 
 halfUserDecoder : Json.Decode.Decoder HalfUser
 halfUserDecoder = 
-  Json.Decode.map6 HalfUser
+  Json.Decode.map7 HalfUser
     (Json.Decode.field "nickname" Json.Decode.string)
     (Json.Decode.field "color" Json.Decode.string)
     (Json.Decode.field "team" Json.Decode.int)
     (Json.Decode.field "score" Json.Decode.int)
     (Json.Decode.field "is_admin" Json.Decode.bool)
     (Json.Decode.field "is_muted" Json.Decode.bool)
+    (Json.Decode.field "is_bot" Json.Decode.bool)
 
 halfUserToUser : String -> HalfUser -> User
-halfUserToUser username {nickname, color, team, score, isadmin, ismuted} =
+halfUserToUser username {nickname, color, team, score, isadmin, ismuted, isbot} =
   User
     username
     nickname
@@ -70,6 +75,7 @@ halfUserToUser username {nickname, color, team, score, isadmin, ismuted} =
     score
     isadmin
     ismuted
+    isbot
 
 decodeUsersList2 : Json.Decode.Decoder (List User)
 decodeUsersList2 =

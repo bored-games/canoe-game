@@ -139,6 +139,7 @@ type Msg
   | SendNewGame
   | SendResign
   | SetTeam Int
+  | AddBot Int
   | AddMove Int Int
   | AddToastMessage (Toast.Msg Toast.Toast)
   | TestToast String
@@ -158,7 +159,7 @@ update msg model =
       let
         oldUser =
           case model.user of
-            Nothing -> User "" "" "" 0 0 False False
+            Nothing -> User "" "" "" 0 0 False False False
             Just u -> u
 
         oldUsers = model.users
@@ -203,7 +204,7 @@ update msg model =
                           0
                         ( Json.Encode.object
                         [ ( "action", Json.Encode.string "update_chat"),
-                          ( "content", Chat.encodeChatline model.room_name (Maybe.withDefault (User "" "" "" 0 0 False False) model.user) newmsg 0 ) ] ) ) )
+                          ( "content", Chat.encodeChatline model.room_name (Maybe.withDefault (User "" "" "" 0 0 False False False) model.user) newmsg 0 ) ] ) ) )
 
     TogglePollOptions ->
       let
@@ -288,8 +289,12 @@ update msg model =
               update (GetChat content) model
             "system_chat_to_player_new_message" ->
               update (GetChat content) model
+            "switch_to_countdown" ->
+              ( model, Cmd.none )
+            "ping" ->
+              ( model, Cmd.none )
             _ ->
-              ((Debug.log "Error: unknown code in JSON message" model), Cmd.none ) -- Error: missing code
+              ((Debug.log ("Error: unknown code in JSON message " ++ action) model), Cmd.none ) -- Error: missing code
 
         Err _ ->
           ( { model | debugString = ("Bad JSON: " ++ (Json.Encode.encode 0 json))}, Cmd.none )
@@ -388,6 +393,17 @@ update msg model =
                 , ("content", Json.Encode.object
                   [ ("action", Json.Encode.string "new_game"),
                     ("content", Json.Encode.string "") ] ) ] ) ) )
+
+    AddBot team ->
+      ( model,
+        outputPort
+          ( Json.Encode.encode
+              0
+              ( Json.Encode.object
+                [ ("action", Json.Encode.string "game_action")
+                , ("content", Json.Encode.object
+                  [ ("action", Json.Encode.string "add_bot"),
+                    ("content", Json.Encode.int team) ] ) ] ) ) )
 
     SendResign ->
       ( model,
@@ -581,7 +597,6 @@ drawPollOptions =
   , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Reset board walls, goals, and robot positions." ] [ text "reset" ]
   , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Reset goal position." ] [ text "new" ]
   , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Set time limit for polls in seconds. Must be at least 30." ] [ text "poll_time ", span [ class "blue" ] [ text "int" ] ]
-  , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Set time limit for finding new solutions. Must be at least 0."] [ text "countdown_time ", span [ class "blue" ] [ text "int" ] ]
   , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "Set number of puzzles before a new board is shuffled." ] [ text "puzzles_before_new_board ", span [ class "blue" ] [ text "int" ] ]
   , div [ class "poll__command", attribute "flow" "left", attribute "tooltip" "1-robot solutions below this number will not add to score." ] [ text "min_moves ", span [ class "blue" ] [ text "int" ] ]
   ]
@@ -660,14 +675,19 @@ modalUser user color teamid =
      Nothing -> div [ class ("modal_" ++ String.toLower color), onClick (SetTeam teamid) ] [ div [ class "pad" ] [ h3 [] [ text (color ++ " player") ], h4 [] [ text "Click to join" ] ] ]
      Just u -> div [ class ("inactive modal_" ++ String.toLower color), onClick (SetTeam 0) ] [ div [ class "pad" ] [ h3 [] [ text (color ++ " player") ], h4 [] [ text u.nickname ] ] ]
 
-showModal : Maybe User -> Maybe User -> List (User) -> Html Msg
-showModal red blue users = 
+showModal : Maybe User -> Maybe User -> List (User) -> String -> Html Msg
+showModal red blue users debugString = 
   div [ class "lightbox" ]
   [ div [ class "modal"]
     [ div [ class "flex_container" ]
       [ modalUser red "Red" 1
       , modalUser blue "Blue" 2
-      , div [ class "modal_spectators" ] [ h3 [] [ text "Spectators" ], text (modalSpectators red blue users) ]
+      , div [ class "modal_spectators", style "text-align" "center" ] [ h3 [] [ text "Spectators" ], text (modalSpectators red blue users) ]
+      , div [ style "width" "100%" ]
+        [ div [ style "padding-top" "2.0rem", style "display" "flex", style "justify-content" "center" ]
+          [ text debugString
+          , button [ onClick (AddBot 1)] [ text "Create red bot" ]
+          , button [ onClick (AddBot 2)] [ text "Create blue bot" ] ] ]
       ]
     ]
   ]
@@ -736,6 +756,6 @@ view model =
           ]
         ]
       ]
-    , if model.red == Nothing || model.blue == Nothing then showModal model.red model.blue model.users else text ""
+    , if model.red == Nothing || model.blue == Nothing then showModal model.red model.blue model.users model.debugString else text ""
     , if model.showHelp then showHelp else text ""
     ]

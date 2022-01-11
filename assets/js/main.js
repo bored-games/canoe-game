@@ -5761,7 +5761,7 @@ var $author$project$Canoe$subscriptions = function (_v0) {
 	return $elm$core$Platform$Sub$batch(
 		_List_fromArray(
 			[
-				A2($elm$time$Time$every, 50000, $author$project$Canoe$Ping),
+				A2($elm$time$Time$every, 30000, $author$project$Canoe$Ping),
 				A2($elm$time$Time$every, 1000, $author$project$Canoe$Tick),
 				$author$project$Canoe$inputPort($author$project$Canoe$GetJSON)
 			]));
@@ -5800,9 +5800,9 @@ var $author$project$Toast$Success = F2(
 	function (a, b) {
 		return {$: 'Success', a: a, b: b};
 	});
-var $author$project$User$User = F7(
-	function (username, nickname, color, team, score, is_admin, is_muted) {
-		return {color: color, is_admin: is_admin, is_muted: is_muted, nickname: nickname, score: score, team: team, username: username};
+var $author$project$User$User = F8(
+	function (username, nickname, color, team, score, is_admin, is_muted, is_bot) {
+		return {color: color, is_admin: is_admin, is_bot: is_bot, is_muted: is_muted, nickname: nickname, score: score, team: team, username: username};
 	});
 var $author$project$Toast$Temporary = {$: 'Temporary'};
 var $author$project$Toast$Entered = {$: 'Entered'};
@@ -6038,10 +6038,10 @@ var $author$project$Chat$chatMessageToChatline = F4(
 var $elm$json$Json$Decode$bool = _Json_decodeBool;
 var $elm$json$Json$Decode$field = _Json_decodeField;
 var $elm$json$Json$Decode$int = _Json_decodeInt;
-var $elm$json$Json$Decode$map7 = _Json_map7;
+var $elm$json$Json$Decode$map8 = _Json_map8;
 var $elm$json$Json$Decode$string = _Json_decodeString;
-var $author$project$User$decodeUser = A8(
-	$elm$json$Json$Decode$map7,
+var $author$project$User$decodeUser = A9(
+	$elm$json$Json$Decode$map8,
 	$author$project$User$User,
 	A2($elm$json$Json$Decode$field, 'username', $elm$json$Json$Decode$string),
 	A2($elm$json$Json$Decode$field, 'nickname', $elm$json$Json$Decode$string),
@@ -6049,7 +6049,8 @@ var $author$project$User$decodeUser = A8(
 	A2($elm$json$Json$Decode$field, 'team', $elm$json$Json$Decode$int),
 	A2($elm$json$Json$Decode$field, 'score', $elm$json$Json$Decode$int),
 	A2($elm$json$Json$Decode$field, 'is_admin', $elm$json$Json$Decode$bool),
-	A2($elm$json$Json$Decode$field, 'is_muted', $elm$json$Json$Decode$bool));
+	A2($elm$json$Json$Decode$field, 'is_muted', $elm$json$Json$Decode$bool),
+	A2($elm$json$Json$Decode$field, 'is_bot', $elm$json$Json$Decode$bool));
 var $elm$json$Json$Decode$map4 = _Json_map4;
 var $elm$json$Json$Decode$oneOf = _Json_oneOf;
 var $elm$json$Json$Decode$maybe = function (decoder) {
@@ -6106,20 +6107,21 @@ var $elm$json$Json$Decode$dict = function (decoder) {
 		$elm$core$Dict$fromList,
 		$elm$json$Json$Decode$keyValuePairs(decoder));
 };
-var $author$project$User$HalfUser = F6(
-	function (nickname, color, team, score, isadmin, ismuted) {
-		return {color: color, isadmin: isadmin, ismuted: ismuted, nickname: nickname, score: score, team: team};
+var $author$project$User$HalfUser = F7(
+	function (nickname, color, team, score, isadmin, ismuted, isbot) {
+		return {color: color, isadmin: isadmin, isbot: isbot, ismuted: ismuted, nickname: nickname, score: score, team: team};
 	});
-var $elm$json$Json$Decode$map6 = _Json_map6;
-var $author$project$User$halfUserDecoder = A7(
-	$elm$json$Json$Decode$map6,
+var $elm$json$Json$Decode$map7 = _Json_map7;
+var $author$project$User$halfUserDecoder = A8(
+	$elm$json$Json$Decode$map7,
 	$author$project$User$HalfUser,
 	A2($elm$json$Json$Decode$field, 'nickname', $elm$json$Json$Decode$string),
 	A2($elm$json$Json$Decode$field, 'color', $elm$json$Json$Decode$string),
 	A2($elm$json$Json$Decode$field, 'team', $elm$json$Json$Decode$int),
 	A2($elm$json$Json$Decode$field, 'score', $elm$json$Json$Decode$int),
 	A2($elm$json$Json$Decode$field, 'is_admin', $elm$json$Json$Decode$bool),
-	A2($elm$json$Json$Decode$field, 'is_muted', $elm$json$Json$Decode$bool));
+	A2($elm$json$Json$Decode$field, 'is_muted', $elm$json$Json$Decode$bool),
+	A2($elm$json$Json$Decode$field, 'is_bot', $elm$json$Json$Decode$bool));
 var $author$project$User$halfUserToUser = F2(
 	function (username, _v0) {
 		var nickname = _v0.nickname;
@@ -6128,7 +6130,8 @@ var $author$project$User$halfUserToUser = F2(
 		var score = _v0.score;
 		var isadmin = _v0.isadmin;
 		var ismuted = _v0.ismuted;
-		return A7($author$project$User$User, username, nickname, color, team, score, isadmin, ismuted);
+		var isbot = _v0.isbot;
+		return A8($author$project$User$User, username, nickname, color, team, score, isadmin, ismuted, isbot);
 	});
 var $elm$core$Dict$map = F2(
 	function (func, dict) {
@@ -6193,7 +6196,10 @@ var $author$project$User$encodeUser = function (user) {
 				$elm$json$Json$Encode$bool(user.is_admin)),
 				_Utils_Tuple2(
 				'is_muted',
-				$elm$json$Json$Encode$bool(user.is_muted))
+				$elm$json$Json$Encode$bool(user.is_muted)),
+				_Utils_Tuple2(
+				'is_bot',
+				$elm$json$Json$Encode$bool(user.is_bot))
 			]));
 };
 var $author$project$Chat$encodeChatline = F4(
@@ -6377,7 +6383,7 @@ var $author$project$Canoe$update = F2(
 					var oldUser = function () {
 						var _v1 = model.user;
 						if (_v1.$ === 'Nothing') {
-							return A7($author$project$User$User, '', '', '', 0, 0, false, false);
+							return A8($author$project$User$User, '', '', '', 0, 0, false, false, false);
 						} else {
 							var u = _v1.a;
 							return u;
@@ -6464,7 +6470,7 @@ var $author$project$Canoe$update = F2(
 												model.room_name,
 												A2(
 													$elm$core$Maybe$withDefault,
-													A7($author$project$User$User, '', '', '', 0, 0, false, false),
+													A8($author$project$User$User, '', '', '', 0, 0, false, false, false),
 													model.user),
 												newmsg,
 												0))
@@ -6625,9 +6631,13 @@ var $author$project$Canoe$update = F2(
 								msg = $temp$msg;
 								model = $temp$model;
 								continue update;
+							case 'switch_to_countdown':
+								return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
+							case 'ping':
+								return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 							default:
 								return _Utils_Tuple2(
-									A2($elm$core$Debug$log, 'Error: unknown code in JSON message', model),
+									A2($elm$core$Debug$log, 'Error: unknown code in JSON message ' + action, model),
 									$elm$core$Platform$Cmd$none);
 						}
 					} else {
@@ -6880,6 +6890,33 @@ var $author$project$Canoe$update = F2(
 														_Utils_Tuple2(
 														'content',
 														$elm$json$Json$Encode$string(''))
+													])))
+										])))));
+				case 'AddBot':
+					var team = msg.a;
+					return _Utils_Tuple2(
+						model,
+						$author$project$Canoe$outputPort(
+							A2(
+								$elm$json$Json$Encode$encode,
+								0,
+								$elm$json$Json$Encode$object(
+									_List_fromArray(
+										[
+											_Utils_Tuple2(
+											'action',
+											$elm$json$Json$Encode$string('game_action')),
+											_Utils_Tuple2(
+											'content',
+											$elm$json$Json$Encode$object(
+												_List_fromArray(
+													[
+														_Utils_Tuple2(
+														'action',
+														$elm$json$Json$Encode$string('add_bot')),
+														_Utils_Tuple2(
+														'content',
+														$elm$json$Json$Encode$int(team))
 													])))
 										])))));
 				case 'SendResign':
@@ -7412,28 +7449,6 @@ var $author$project$Canoe$drawPollOptions = _List_fromArray(
 		_List_fromArray(
 			[
 				$elm$html$Html$text('poll_time '),
-				A2(
-				$elm$html$Html$span,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('blue')
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('int')
-					]))
-			])),
-		A2(
-		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('poll__command'),
-				A2($elm$html$Html$Attributes$attribute, 'flow', 'left'),
-				A2($elm$html$Html$Attributes$attribute, 'tooltip', 'Set time limit for finding new solutions. Must be at least 0.')
-			]),
-		_List_fromArray(
-			[
-				$elm$html$Html$text('countdown_time '),
 				A2(
 				$elm$html$Html$span,
 				_List_fromArray(
@@ -8070,6 +8085,9 @@ var $author$project$Canoe$showHelp = A2(
 						]))
 				]))
 		]));
+var $author$project$Canoe$AddBot = function (a) {
+	return {$: 'AddBot', a: a};
+};
 var $elm$html$Html$h3 = _VirtualDom_node('h3');
 var $author$project$Canoe$modalSpectators = F3(
 	function (red_user, blue_user, all_users) {
@@ -8177,8 +8195,8 @@ var $author$project$Canoe$modalUser = F3(
 					]));
 		}
 	});
-var $author$project$Canoe$showModal = F3(
-	function (red, blue, users) {
+var $author$project$Canoe$showModal = F4(
+	function (red, blue, users, debugString) {
 		return A2(
 			$elm$html$Html$div,
 			_List_fromArray(
@@ -8209,7 +8227,8 @@ var $author$project$Canoe$showModal = F3(
 									$elm$html$Html$div,
 									_List_fromArray(
 										[
-											$elm$html$Html$Attributes$class('modal_spectators')
+											$elm$html$Html$Attributes$class('modal_spectators'),
+											A2($elm$html$Html$Attributes$style, 'text-align', 'center')
 										]),
 									_List_fromArray(
 										[
@@ -8222,6 +8241,49 @@ var $author$project$Canoe$showModal = F3(
 												])),
 											$elm$html$Html$text(
 											A3($author$project$Canoe$modalSpectators, red, blue, users))
+										])),
+									A2(
+									$elm$html$Html$div,
+									_List_fromArray(
+										[
+											A2($elm$html$Html$Attributes$style, 'width', '100%')
+										]),
+									_List_fromArray(
+										[
+											A2(
+											$elm$html$Html$div,
+											_List_fromArray(
+												[
+													A2($elm$html$Html$Attributes$style, 'padding-top', '2.0rem'),
+													A2($elm$html$Html$Attributes$style, 'display', 'flex'),
+													A2($elm$html$Html$Attributes$style, 'justify-content', 'center')
+												]),
+											_List_fromArray(
+												[
+													$elm$html$Html$text(debugString),
+													A2(
+													$elm$html$Html$button,
+													_List_fromArray(
+														[
+															$elm$html$Html$Events$onClick(
+															$author$project$Canoe$AddBot(1))
+														]),
+													_List_fromArray(
+														[
+															$elm$html$Html$text('Create red bot')
+														])),
+													A2(
+													$elm$html$Html$button,
+													_List_fromArray(
+														[
+															$elm$html$Html$Events$onClick(
+															$author$project$Canoe$AddBot(2))
+														]),
+													_List_fromArray(
+														[
+															$elm$html$Html$text('Create blue bot')
+														]))
+												]))
 										]))
 								]))
 						]))
@@ -8555,7 +8617,7 @@ var $author$project$Canoe$view = function (model) {
 									]))
 							]))
 					])),
-				(_Utils_eq(model.red, $elm$core$Maybe$Nothing) || _Utils_eq(model.blue, $elm$core$Maybe$Nothing)) ? A3($author$project$Canoe$showModal, model.red, model.blue, model.users) : $elm$html$Html$text(''),
+				(_Utils_eq(model.red, $elm$core$Maybe$Nothing) || _Utils_eq(model.blue, $elm$core$Maybe$Nothing)) ? A4($author$project$Canoe$showModal, model.red, model.blue, model.users, model.debugString) : $elm$html$Html$text(''),
 				model.showHelp ? $author$project$Canoe$showHelp : $elm$html$Html$text('')
 			]));
 };

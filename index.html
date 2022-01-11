@@ -39,13 +39,11 @@
       }
 
       socket.onopen = function() {
-        
         app.ports.outputPort.subscribe(function (data) {
           console.log("Message from client:")
           console.log(data);
           socket.send(data);
         });
-
       }
 
       // reconnect on socket close?
